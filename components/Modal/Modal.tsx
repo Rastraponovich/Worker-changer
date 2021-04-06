@@ -41,7 +41,7 @@ const Modal: React.FC<InputProps> = ({
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
-        onClick()
+        onClose()
     }
 
     const handleClose = (event: React.MouseEvent<HTMLDivElement>) => {
