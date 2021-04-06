@@ -11,7 +11,7 @@ import { useRouter } from "next/router"
 import Layout from "../components/Layout/Layout"
 import CashierForm from "../components/CashierForm/CashierForm"
 import Modal from "../components/Modal/Modal"
-import { useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useRef, useState } from "react"
 
 const agent = new https.Agent({
     rejectUnauthorized: false,
@@ -74,11 +74,11 @@ const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
     const [showModal, setShowModal] = useState(false)
     const [modalMessage, setModalMessage] = useState("")
     const [serverState, setServerState] = useState(status.Status === "Ok")
+    const Status = createContext(serverState ? "Ok" : "Error")
 
     useEffect(() => {
         setInterval(() => {
             axios.get("/api/getStatus").then((data) => {
-                console.log(data.data)
                 if (data.data.commandResult.Status === "Ok") {
                     setServerState(true)
                 } else {
@@ -104,47 +104,52 @@ const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
         setShowModal(!showModal)
     }
     return (
-        <Layout>
-            {/* serverState={serverState} */}
-            <section className={styles.section}>
-                <div className={styles.titleBlock}>
-                    <h1 className={styles.title}>Настройка кассиров</h1>
-                    <span
-                        className={
-                            serverState
-                                ? styles.circleActive
-                                : styles.circleInActive
-                        }
-                    ></span>
-                </div>
-                {serverState ? (
-                    <CashierForm
-                        workers={workers}
-                        showModal={handleShowModal}
-                        serverState={serverState}
-                    />
-                ) : (
-                    <div className={styles.errorBlock}>
-                        <h2 className={styles.errorMessage}>
-                            Нет Связи. попробуйте снова
-                        </h2>
+        <Status.Provider value={serverState ? "Ok" : "Error"}>
+            <Layout>
+                {/* serverState={serverState} */}
+                <section className={styles.section}>
+                    <div className={styles.titleBlock}>
+                        <h1 className={styles.title}>Настройка кассиров</h1>
+                        <span
+                            className={
+                                serverState
+                                    ? styles.circleActive
+                                    : styles.circleInActive
+                            }
+                        ></span>
                     </div>
-                )}
-                <div style={{ flexGrow: 1 }} />
-                {/* <button
+                    {serverState ? (
+                        <CashierForm
+                            workers={workers}
+                            showModal={handleShowModal}
+                            serverState={serverState}
+                        />
+                    ) : (
+                        <div className={styles.errorBlock}>
+                            <h2 className={styles.errorMessage}>
+                                Нет Связи. попробуйте снова
+                            </h2>
+                        </div>
+                    )}
+                    <div style={{ flexGrow: 1 }} />
+                    {/* <button
                     className={styles.button}
                     onClick={() => router.push("/workers")}
                 >
                     Работники
                 </button> */}
-            </section>
-            <Modal show={showModal} onClose={handleOpenModal}>
-                <p>{modalMessage}</p>
-                <button className={styles.modalButton} onClick={handleClick}>
-                    Продолжить
-                </button>
-            </Modal>
-        </Layout>
+                </section>
+                <Modal show={showModal} onClose={handleOpenModal}>
+                    <p>{modalMessage}</p>
+                    <button
+                        className={styles.modalButton}
+                        onClick={handleClick}
+                    >
+                        Продолжить
+                    </button>
+                </Modal>
+            </Layout>
+        </Status.Provider>
     )
 }
 export default Home
