@@ -1,26 +1,14 @@
 import React, { useEffect, useState } from "react"
 import styles from "../../styles/Home.module.css"
 
-enum ButtonType {
-    refresh = "перезагрузить",
-    OK = "ок",
-    infom = "ок",
-    success = "закрыть",
-}
-
 interface InputProps {
-    text: string
-    onClick?: Function
-    type: string
     show: boolean
     autoClose?: number
     onClose?: Function
 }
 
 const Modal: React.FC<InputProps> = ({
-    text,
-    onClick,
-    type,
+    children,
     show,
     onClose,
     autoClose,
@@ -39,10 +27,10 @@ const Modal: React.FC<InputProps> = ({
         }
     }, [show])
 
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault()
-        onClose()
-    }
+    // const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    //     event.preventDefault()
+    //     onClose()
+    // }
 
     const handleClose = (event: React.MouseEvent<HTMLDivElement>) => {
         // event.preventDefault()
@@ -57,10 +45,11 @@ const Modal: React.FC<InputProps> = ({
         >
             <div className={styles.modalWrapper}></div>
             <div className={styles.modalTextBlock}>
-                <p>{text}</p>
+                {children}
+                {/* <p>{text}</p>
                 <button className={styles.modalButton} onClick={handleClick}>
                     {ButtonType[type]}
-                </button>
+                </button> */}
             </div>
         </div>
     )

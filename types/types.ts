@@ -13,9 +13,18 @@ export interface IAuth {
     password: string
 }
 
+export interface IStatus {
+    ArrivalDateTime?: Date
+    NetName?: string
+    Processed: number
+    XmlVersion?: number
+    ServerVersion?: string
+    Status?: string
+}
+
 export interface InputProps {
     workers: IWorker[]
-    status: {}
+    status: IStatus
     commandResult: {}
     host: string
     username: string

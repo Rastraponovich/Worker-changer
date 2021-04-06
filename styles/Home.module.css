@@ -5,6 +5,7 @@
     justify-content: center;
     align-items: center;
     flex-grow: 1;
+    position: relative;
 }
 
 .wrapper {
@@ -12,19 +13,7 @@
     display: flex;
     flex-direction: column;
 }
-.header {
-    display: flex;
-    padding: 0.5rem 1rem;
-    background-color: #293048;
-}
 
-.header > * {
-    margin: 0;
-}
-
-.header h2 {
-    color: #fff;
-}
 .main {
     padding: 1rem 0;
     flex: 1;
@@ -40,14 +29,29 @@
     flex-grow: 1;
     width: 100%;
 }
-
+.titleBlock {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2rem;
+}
 .title {
     margin: 0;
     line-height: 1.15;
     font-size: 2rem;
     text-align: center;
 }
-
+.circleActive {
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    background-color: green;
+}
+.circleInActive {
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    background-color: red;
+}
 .grid {
     display: flex;
     align-items: flex-start;
@@ -197,105 +201,8 @@
     flex-wrap: wrap;
     justify-content: center;
 }
-.cashForm {
-    margin: 1rem;
-    max-width: 45%;
-    width: 100%;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    display: flex;
-    flex-basis: 35%;
-    box-sizing: border-box;
-    flex-direction: column;
-    padding: 1rem;
-    border-radius: 4px;
-    /* border: 1px solid #0070f3; */
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-.cashForm:hover {
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-}
-
-.cashFormHeder {
-    display: flex;
-    margin-bottom: 1rem;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.input {
-    padding: 1rem 0.75rem;
-    margin: 1rem 0;
-    font-size: 1rem;
-    border-radius: 4px;
-    border: 2px solid rgba(0, 0, 0, 0.12);
-    outline: none;
-    transition: border 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none; /* Remove default arrow */
-}
-
-.input:hover {
-    border: 2px solid rgba(0, 0, 0, 0.3);
-}
-.input:focus {
-    border: 2px solid #0070f3;
-}
-
-.option {
-    display: flex;
-    flex-direction: column;
-}
-
-.submit {
-    display: flex;
-    justify-content: center;
-    background-color: green;
-    color: #fff;
-    font-size: 1.3rem;
-    padding: 1rem 1.5rem;
-    outline: none;
-    opacity: 1;
-    border-radius: 4px;
-    border: 2px solid transparent;
-}
-
-.submit:hover {
-    color: green;
-    background-color: #fff;
-    border-color: green;
-}
-
-.submit:active {
-    opacity: 0.67;
-}
-
-.infoButton {
-    display: none;
-    padding: 0.5rem 1rem;
-    outline: none;
-    border: 1px solid #293048;
-    border-radius: 4px;
-    text-transform: uppercase;
-    background-color: transparent;
-    color: #293048;
-}
-.infoButton:hover {
-    background-color: #293048;
-    color: #fff;
-}
-.infoButton:active {
-    opacity: 0.67;
-}
 
 @media (min-width: 1px) {
-    .cashForm {
-        max-width: 100%;
-        width: 80%;
-    }
-    .cashForm span {
-        margin-bottom: 1rem;
-    }
     .input {
         font-size: 1rem;
     }
@@ -305,12 +212,7 @@
         align-self: center;
         font-size: 1.3rem;
     }
-    .infoButton {
-        display: block;
-    }
-    .option {
-        font-size: 0.7rem;
-    }
+
     .card {
         align-self: center;
         max-width: 90%;
@@ -321,38 +223,58 @@
     .modalTextBlock {
         margin: 1rem;
     }
+    .circleActive,
+    .circleInActive {
+        display: none;
+    }
 }
 
 @media (min-width: 576px) {
-    .cashForm {
-        max-width: 100%;
-    }
-    .header {
-        display: none;
-    }
     .title {
         display: block;
+        color: #fff;
     }
-    .cashForm span {
-        white-space: nowrap;
-        overflow: hidden;
-        margin-bottom: 1rem;
+    .circleActive,
+    .circleInActive {
+        display: block;
     }
+
     .card {
         align-self: stretch;
         max-width: 25%;
     }
 }
 
+.errorBlock {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 23;
+    justify-content: center;
+    align-items: center;
+    padding: 0 2rem;
+}
+.errorMessage {
+    color: #fff;
+    text-align: center;
+}
+
 @media (min-width: 768px) {
-    .cashForm {
-        max-width: 45%;
+    .errorMessage {
+        color: #fff;
     }
 }
 
 @media (min-width: 992px) {
-    .header {
-        display: flex;
+    .circleActive,
+    .circleInActive {
+        display: none;
+    }
+    .errorMessage {
+        color: #293048;
+    }
+    .title {
+        color: #293048;
+        display: none;
     }
 }
 
@@ -366,7 +288,7 @@
     }
 }
 @keyframes moveWrapper {
-    form {
+    from {
         opacity: 0;
     }
 

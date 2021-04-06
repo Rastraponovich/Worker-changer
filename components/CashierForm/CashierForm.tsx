@@ -7,25 +7,35 @@ import { useRouter } from "next/router"
 
 interface InputProps {
     workers: IWorker[]
+    serverState: boolean
     showModal: Function
 }
 
-const CashierForm: React.FC<InputProps> = ({ workers, showModal }) => {
+const bulkWorker: IWorker = {
+    genTaxPayerIdNum: null,
+    Code: null,
+    Ident: null,
+    Name: "",
+    OfficialName: "",
+    Status: "",
+    GUIDString: "",
+}
+
+const CashierForm: React.FC<InputProps> = ({
+    workers,
+    showModal,
+    serverState,
+}) => {
     const router = useRouter()
     const [workerOOO, setWorkerOOO] = useState(
         workers.find((item) => item.Name === "Кассир ООО")
     )
-
-    const [parentIP, setParentIP] = useState(
-        workers.find((item) => item.Name === "Кассир ИП").GUIDString
-    )
-    const [parentOOO, setParentOOO] = useState(
-        workers.find((item) => item.Name === "Кассир ООО").GUIDString
-    )
-
     const [workerIP, setWorkerIP] = useState(
         workers.find((item) => item.Name === "Кассир ИП")
     )
+
+    const [newIP, setNewIP] = useState(bulkWorker)
+    const [newOOO, setNewOOO] = useState(bulkWorker)
 
     const [emp, setEmp] = useState(
         workers.filter(
@@ -39,21 +49,24 @@ const CashierForm: React.FC<InputProps> = ({ workers, showModal }) => {
     const handleChange = (event: any) => {
         const { id, value } = event.target
         const worker = emp.find((workerItem) => value === workerItem.GUIDString)
-
+        // console.log(worker)
         if (id === "OOO") {
-            setWorkerOOO({ ...worker, GUIDString: workerOOO.GUIDString })
-        } else {
-            setWorkerIP({ ...worker, GUIDString: workerIP.GUIDString })
+            if (worker) {
+                setNewOOO({ ...worker, GUIDString: workerOOO.GUIDString })
+            } else {
+                setNewOOO(bulkWorker)
+            }
+        }
+        if (id === "IP") {
+            if (worker) {
+                setNewIP({ ...worker, GUIDString: workerIP.GUIDString })
+            } else {
+                setNewIP(bulkWorker)
+            }
         }
     }
 
-    const handleSave = async (type: string) => {
-        let worker: IWorker = workerIP
-
-        if (type === "OOO") {
-            worker = workerOOO
-        }
-
+    const handleSave = async (worker: IWorker, type: string) => {
         const result: {
             data: IWorkerChangeRespose
         } = await axios.post("/api/setworker", { worker })
@@ -63,6 +76,12 @@ const CashierForm: React.FC<InputProps> = ({ workers, showModal }) => {
                 `Кассир ${type} изменен. Перезагрузите страницу`,
                 "refresh"
             )
+            if (type === "OOO") {
+                setNewOOO(bulkWorker)
+            }
+            if (type === "IP") {
+                setNewIP(bulkWorker)
+            }
         } else {
             showModal(
                 `Произошла ошибка! Кассир ${type} неизменен. Перезагрузите страницу`,
@@ -76,24 +95,24 @@ const CashierForm: React.FC<InputProps> = ({ workers, showModal }) => {
             <Cashier
                 title="ИП"
                 emp={emp}
+                data={newIP}
                 change={handleChange}
                 worker={workerIP}
-                styles={styles}
                 type="IP"
                 onSave={handleSave}
-                parent={parentIP}
                 showModal={showModal}
+                serverState={serverState}
             />
             <Cashier
                 title="ООО"
                 emp={emp}
+                data={newOOO}
                 change={handleChange}
                 worker={workerOOO}
-                styles={styles}
                 type="OOO"
                 onSave={handleSave}
-                parent={parentOOO}
                 showModal={showModal}
+                serverState={serverState}
             />
         </div>
     )

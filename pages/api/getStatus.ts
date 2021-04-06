@@ -2,7 +2,7 @@ const parser = require("fast-xml-parser")
 const https = require("https")
 import axios from "axios"
 import { NextApiRequest, NextApiResponse } from "next"
-import { IAuth, IWorker } from "../../types/types"
+import { IAuth } from "../../types/types"
 const he = require("he")
 
 const agent = new https.Agent({
@@ -62,29 +62,18 @@ export const sendData = async (xmlQuery: string) => {
     }
 }
 
-const handleSave = async (worker: IWorker) => {
+const getStatus = async () => {
     const xmlQuery = `<?xml version="1.0" encoding="utf-8"?>
     <RK7Query>
-      <RK7Command2 CMD="SetRefData" RefName="Employees">
-        <Items>
-            <Item 
-              GUIDString="${worker.GUIDString}" 
-              genTaxPayerIdNum="${worker.genTaxPayerIdNum}"
-              OfficialName="${worker.OfficialName}"/>
-        </Items>
-    </RK7Command2>
+      <RK7Command2 CMD="GetSystemInfo" />
+     
   </RK7Query>`
     const result = await sendData(xmlQuery)
     return result
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-    const { worker } = req.body
-    console.log(worker)
-    if (worker.GUIDString === "") {
-        return res.status(200).json({ commandResult: { Status: "noChanges" } })
-    }
-    const result = await handleSave(worker)
+    const result = await getStatus()
 
     const { CommandResult, ...queryResult } = result.RK7QueryResult[0]
 

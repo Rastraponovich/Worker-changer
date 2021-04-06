@@ -11,7 +11,7 @@ import { useRouter } from "next/router"
 import Layout from "../components/Layout/Layout"
 import CashierForm from "../components/CashierForm/CashierForm"
 import Modal from "../components/Modal/Modal"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const agent = new https.Agent({
     rejectUnauthorized: false,
@@ -52,8 +52,9 @@ const xmlParser = (xmlData: string) => {
     return jsonObj
 }
 
-export const sendData = async (URL: string, xmlQuery: string) => {
+export const sendData = async (xmlQuery: string) => {
     try {
+        const URL = process.env.RK7_URL
         const request = await axios.post(URL, xmlQuery, {
             httpsAgent: agent,
             auth: credentials,
@@ -72,40 +73,76 @@ const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
     const router = useRouter()
     const [showModal, setShowModal] = useState(false)
     const [modalMessage, setModalMessage] = useState("")
-    const [typeModal, setTypeModal] = useState("inform")
+    const [serverState, setServerState] = useState(status.Status === "Ok")
+
+    useEffect(() => {
+        setInterval(() => {
+            axios.get("/api/getStatus").then((data) => {
+                console.log(data.data)
+                if (data.data.commandResult.Status === "Ok") {
+                    setServerState(true)
+                } else {
+                    setServerState(false)
+                }
+            })
+        }, 30000)
+    }, [status])
 
     const handleShowModal = (text: string, type: string) => {
         setModalMessage(text)
-        setTypeModal(type)
         setShowModal(!showModal)
     }
-    const handleCloseModal = () => {
+
+    const handleClick = () => {
+        setModalMessage("")
         setShowModal(false)
+        router.reload()
     }
+
     const handleOpenModal = () => {
         setModalMessage("")
-        setTypeModal("inform")
         setShowModal(!showModal)
     }
     return (
-        <Layout>
+        <Layout serverState={serverState}>
             <section className={styles.section}>
-                <h1 className={styles.title}>Настройка кассиров</h1>
-                <CashierForm workers={workers} showModal={handleShowModal} />
+                <div className={styles.titleBlock}>
+                    <h1 className={styles.title}>Настройка кассиров</h1>
+                    <span
+                        className={
+                            serverState
+                                ? styles.circleActive
+                                : styles.circleInActive
+                        }
+                    ></span>
+                </div>
+                {serverState ? (
+                    <CashierForm
+                        workers={workers}
+                        showModal={handleShowModal}
+                        serverState={serverState}
+                    />
+                ) : (
+                    <div className={styles.errorBlock}>
+                        <h2 className={styles.errorMessage}>
+                            Нет Связи. попробуйте снова
+                        </h2>
+                    </div>
+                )}
                 <div style={{ flexGrow: 1 }} />
-                <button
+                {/* <button
                     className={styles.button}
                     onClick={() => router.push("/workers")}
                 >
                     Работники
-                </button>
+                </button> */}
             </section>
-            <Modal
-                type={typeModal}
-                text={modalMessage}
-                show={showModal}
-                onClose={handleOpenModal}
-            />
+            <Modal show={showModal} onClose={handleOpenModal}>
+                <p>{modalMessage}</p>
+                <button className={styles.modalButton} onClick={handleClick}>
+                    Продолжить
+                </button>
+            </Modal>
         </Layout>
     )
 }
@@ -121,7 +158,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
             </PROPFILTERS>
         </RK7Command2>
     </RK7Query>`
-    const response = await sendData(process.env.RK7_URL, xmlQuery)
+    const response = await sendData(xmlQuery)
     const { CommandResult, ...status } = response.RK7QueryResult[0]
     const { SourceCommand, RK7Reference, ...commandResult } = CommandResult[0]
     const workers: IWorker[] = RK7Reference[0].Items[0].Item.filter(

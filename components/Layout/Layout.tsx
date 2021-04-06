@@ -4,7 +4,7 @@ import React, { useState } from "react"
 import styles from "../../styles/Home.module.css"
 import Header from "../Header/Header"
 
-const Layout = ({ children }) => {
+const Layout = ({ children, serverState }) => {
     const router = useRouter()
 
     return (
@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
                 <title>WorkerChanger</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Header />
+            <Header serverState={serverState} />
             <div className={styles.container}>
                 <main className={styles.main}>{children}</main>
             </div>
