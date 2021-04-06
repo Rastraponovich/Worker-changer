@@ -1,10 +1,10 @@
 import Head from "next/head"
 import { useRouter } from "next/router"
-import React, { useState } from "react"
+import React, { ReactPortal, useState } from "react"
 import styles from "../../styles/Home.module.css"
 import Header from "../Header/Header"
 
-const Layout = ({ children, serverState }) => {
+const Layout = ({ children }) => {
     const router = useRouter()
 
     return (
@@ -13,7 +13,7 @@ const Layout = ({ children, serverState }) => {
                 <title>WorkerChanger</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Header serverState={serverState} />
+            <Header />
             <div className={styles.container}>
                 <main className={styles.main}>{children}</main>
             </div>

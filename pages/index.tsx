@@ -104,7 +104,8 @@ const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
         setShowModal(!showModal)
     }
     return (
-        <Layout serverState={serverState}>
+        <Layout>
+            {/* serverState={serverState} */}
             <section className={styles.section}>
                 <div className={styles.titleBlock}>
                     <h1 className={styles.title}>Настройка кассиров</h1>

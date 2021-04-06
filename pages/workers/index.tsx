@@ -35,12 +35,12 @@ export const getServerSideProps: GetServerSideProps = async () => {
     <RK7Query>
         <RK7Command2 CMD="GetRefData" RefName="EMPLOYEES" WithMacroProp="1" PropMask="items.(Code,Name,Ident,genTaxPayerIdNum,OfficialName,Status, GUIDString)"  >
             <PROPFILTERS>
-                <PROPFILTER name="MainParentIdent" value="100004"/>
+                <PROPFILTER name="MainParentIdent" value="${process.env.MAINPARENTIDENT}"/>
 
             </PROPFILTERS>
         </RK7Command2>
     </RK7Query>`
-    const response = await sendData(process.env.RK7_URL, xmlQuery)
+    const response = await sendData(xmlQuery)
     const { CommandResult } = response.RK7QueryResult[0]
     const { SourceCommand, RK7Reference, ...commandResult } = CommandResult[0]
     const workers: IWorker[] = RK7Reference[0].Items[0].Item.filter(

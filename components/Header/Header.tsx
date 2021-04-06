@@ -1,16 +1,16 @@
 import React from "react"
 import styles from "../../styles/Header.module.css"
-const Header = ({ serverState }) => {
+const Header = () => {
     return (
         <header className={styles.header}>
             <a href="/" className={styles.title}>
                 Настройка кассиров
             </a>
-            <span
+            {/* <span
                 className={
                     serverState ? styles.circleActive : styles.circleInActive
                 }
-            ></span>
+            ></span> */}
         </header>
     )
 }
