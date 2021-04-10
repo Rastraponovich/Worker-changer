@@ -162,6 +162,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
         </RK7Command2>
     </RK7Query>`
     const response = await sendData(xmlQuery)
+    console.log(response)
     const { CommandResult, ...status } = response.RK7QueryResult[0]
     const { SourceCommand, RK7Reference, ...commandResult } = CommandResult[0]
     const workers: IWorker[] = RK7Reference[0].Items[0].Item.filter(
