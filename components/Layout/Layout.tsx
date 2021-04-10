@@ -1,6 +1,6 @@
 import Head from "next/head"
 import { useRouter } from "next/router"
-import React, { ReactPortal, useState } from "react"
+import React from "react"
 import styles from "../../styles/Home.module.css"
 import Header from "../Header/Header"
 
