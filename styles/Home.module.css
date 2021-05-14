@@ -253,6 +253,7 @@
     align-items: center;
     padding: 0 2rem;
 }
+
 .errorMessage {
     color: #fff;
     text-align: center;
@@ -260,6 +261,9 @@
 
 @media (min-width: 768px) {
     .errorMessage {
+        color: #fff;
+    }
+    .info {
         color: #fff;
     }
 }
@@ -276,6 +280,9 @@
         color: #293048;
         display: none;
     }
+    .info {
+        color: #293048;
+    }
 }
 
 @media (min-width: 1200px) {
@@ -285,6 +292,9 @@
     .grid {
         width: 100%;
         flex-direction: column;
+    }
+    .info {
+        color: #fff;
     }
 }
 @keyframes moveWrapper {

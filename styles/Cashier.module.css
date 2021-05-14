@@ -75,11 +75,13 @@
 .input:focus {
     border: 2px solid #293048;
 }
+.currentOption {
+    background-color: #293048;
 
-.option {
-    display: flex;
-    flex-direction: column;
+    font-style: italic;
+    color: gold;
 }
+
 .option:hover {
     color: #fff;
     background-color: #293048;

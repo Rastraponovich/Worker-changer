@@ -74,12 +74,7 @@ const Cashier: React.FC<InputProps> = (props) => {
             >
                 <option
                     value={worker.GUIDString}
-                    className={styles.option}
-                    style={{
-                        background: "#293048",
-                        fontStyle: "italic",
-                        color: "#fff",
-                    }}
+                    className={styles.currentOption}
                 >
                     {worker.OfficialName} : {worker.genTaxPayerIdNum}
                 </option>
@@ -94,7 +89,7 @@ const Cashier: React.FC<InputProps> = (props) => {
                               <option
                                   key={empItem.GUIDString}
                                   value={empItem.GUIDString}
-                                  className={styles.option}
+                                  //   className={styles.option}
                               >
                                   {empItem.OfficialName} :{" "}
                                   {empItem.genTaxPayerIdNum}

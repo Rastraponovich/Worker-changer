@@ -1,73 +1,17 @@
 import styles from "../styles/Home.module.css"
-import { GetServerSideProps } from "next"
-import { IAuth, InputProps, IWorker } from "../types/types"
-
-const parser = require("fast-xml-parser")
-const https = require("https")
 import axios from "axios"
-const he = require("he")
 
+import { GetServerSideProps } from "next"
+import { InputProps, IWorker } from "../types/types"
+import { useEffect, useState } from "react"
+import { useParser } from "../hooks/usePareser"
+import { sendData } from "../hooks/useGetData"
 import { useRouter } from "next/router"
 import Layout from "../components/Layout/Layout"
 import CashierForm from "../components/CashierForm/CashierForm"
 import Modal from "../components/Modal/Modal"
-import { useEffect, useState } from "react"
-
-const agent = new https.Agent({
-    rejectUnauthorized: false,
-    agent: false,
-    secureProtocol: "TLSv1_method",
-})
-
-const arrayObjOptions = {
-    attributeNamePrefix: "",
-    textNodeName: "#text",
-    ignoreAttributes: false,
-    ignoreNameSpace: false,
-    allowBooleanAttributes: true,
-    parseNodeValue: true,
-    parseAttributeValue: true,
-    trimValues: true,
-    cdataTagName: "__cdata",
-    cdataPositionChar: "\\c",
-    parseTrueNumberOnly: false,
-    arrayMode: true,
-    attrValueProcessor: (val: string, attrName: string) =>
-        he.decode(val, { isAttributeValue: true }), //default is a=>a
-    tagValueProcessor: (val: string, tagName: string) => he.decode(val), //default is a=>a
-    stopNodes: ["parse-me-as-string"],
-}
-
-const credentials: IAuth = {
-    username: process.env.RK7_LOGIN,
-    password: process.env.RK7_PASSWORD,
-}
-
-const xmlParser = (xmlData: string) => {
-    let jsonObj = {}
-
-    if (parser.validate(xmlData) === true) {
-        jsonObj = parser.parse(xmlData, arrayObjOptions)
-    }
-    return jsonObj
-}
-
-export const sendData = async (xmlQuery: string) => {
-    try {
-        const URL = process.env.RK7_URL
-        const request = await axios.post(URL, xmlQuery, {
-            httpsAgent: agent,
-            auth: credentials,
-            headers: {
-                "Content-Type": "text/xml",
-            },
-        })
-        const result = xmlParser(request.data)
-        return result
-    } catch (error) {
-        return error
-    }
-}
+import NoData from "../components/NoData/NoData"
+import classes from "../styles/Home.module.css"
 
 const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
     const router = useRouter()
@@ -78,7 +22,7 @@ const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
     useEffect(() => {
         setInterval(() => {
             axios.get("/api/getStatus").then((data) => {
-                if (data.data.commandResult.Status === "Ok") {
+                if (data.data?.commandResult?.Status === "Ok") {
                     setServerState(true)
                 } else {
                     setServerState(false)
@@ -103,11 +47,14 @@ const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
         setShowModal(!showModal)
     }
     return (
-        <Layout>
-            <span style={{ display: "flex", alignSelf: "flex-end" }}>
-                статус сервера: {serverState ? "работает" : "нет связи"}
-            </span>
-
+        <Layout serverState={serverState}>
+            <section>
+                <ul className={classes.info}>
+                    <li>Выберите кассира из выпадающего списка</li>
+                    <li>После выбора нажмите изменить</li>
+                    <li>текущий кассир в списке отражен курсивом</li>
+                </ul>
+            </section>
             <section className={styles.section}>
                 <div className={styles.titleBlock}>
                     <h1 className={styles.title}>Настройка кассиров</h1>
@@ -126,19 +73,9 @@ const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
                         serverState={serverState}
                     />
                 ) : (
-                    <div className={styles.errorBlock}>
-                        <h2 className={styles.errorMessage}>
-                            Нет Связи. попробуйте снова
-                        </h2>
-                    </div>
+                    <NoData />
                 )}
                 <div style={{ flexGrow: 1 }} />
-                {/* <button
-                    className={styles.button}
-                    onClick={() => router.push("/workers")}
-                >
-                    Работники
-                </button> */}
             </section>
             <Modal show={showModal} onClose={handleOpenModal}>
                 <p>{modalMessage}</p>
@@ -161,19 +98,33 @@ export const getServerSideProps: GetServerSideProps = async () => {
             </PROPFILTERS>
         </RK7Command2>
     </RK7Query>`
-    const response = await sendData(xmlQuery)
-    console.log(response)
-    const { CommandResult, ...status } = response.RK7QueryResult[0]
-    const { SourceCommand, RK7Reference, ...commandResult } = CommandResult[0]
-    const workers: IWorker[] = RK7Reference[0].Items[0].Item.filter(
-        (worker: IWorker) => worker.Status !== "rsDeleted"
-    )
+    const res = await sendData(xmlQuery)
+    const response = useParser(res)
 
-    return {
-        props: {
-            workers,
-            status,
-            commandResult,
-        },
+    if (response?.RK7QueryResult) {
+        const { CommandResult, ...status } = response.RK7QueryResult[0]
+        const {
+            SourceCommand,
+            RK7Reference,
+            ...commandResult
+        } = CommandResult[0]
+
+        const workers: IWorker[] = RK7Reference[0].Items[0].Item.filter(
+            (worker: IWorker) => worker.Status !== "rsDeleted"
+        )
+
+        return {
+            props: {
+                workers,
+                status,
+                commandResult,
+            },
+        }
+    } else {
+        return {
+            props: {
+                status: { Status: "no ok" },
+            },
+        }
     }
 }

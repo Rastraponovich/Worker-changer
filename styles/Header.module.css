@@ -24,6 +24,14 @@
     border-radius: 50%;
     background-color: red;
 }
+.statusBlock {
+    display: flex;
+    align-items: center;
+    color: #fff;
+}
+.statusBlock span:not(:last-child) {
+    margin: 0 0.5rem 0 0;
+}
 
 @media (min-width: 576px) {
     .header {

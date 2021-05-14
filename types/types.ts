@@ -51,3 +51,7 @@ export interface IWorkerChangeRespose {
     commandResult: ICommandResult
     queryResult: IQueryResult
 }
+
+export interface ParserInputProps {
+    (xmlData: string): any
+}

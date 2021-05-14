@@ -4,7 +4,9 @@ import WorkerCard from "../../components/WorkerCard/WorkerCard"
 import { IWorker } from "../../types/types"
 import styles from "../../styles/Home.module.css"
 import { GetServerSideProps } from "next"
-import { sendData } from "../index"
+import { sendData } from "../../hooks/useGetData"
+import { useParser } from "../../hooks/usePareser"
+
 import Layout from "../../components/Layout/Layout"
 
 interface InputProps {
@@ -40,7 +42,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
             </PROPFILTERS>
         </RK7Command2>
     </RK7Query>`
-    const response = await sendData(xmlQuery)
+    const response = useParser(await sendData(xmlQuery))
     const { CommandResult } = response.RK7QueryResult[0]
     const { SourceCommand, RK7Reference, ...commandResult } = CommandResult[0]
     const workers: IWorker[] = RK7Reference[0].Items[0].Item.filter(
