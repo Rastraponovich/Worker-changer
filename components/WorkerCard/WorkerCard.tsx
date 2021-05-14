@@ -1,6 +1,6 @@
 import React from "react"
-import styles from "../../styles/Home.module.css"
-import { IWorker } from "../../types/types"
+import styles from "@/styles/Home.module.css"
+import { IWorker } from "@/types/types"
 
 interface InputProps extends IWorker {}
 

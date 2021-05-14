@@ -1,9 +1,11 @@
 import React, { useState } from "react"
-import { IWorker, IWorkerChangeRespose } from "../../types/types"
-import styles from "../../styles/Home.module.css"
-import Cashier from "./Cashier"
-import axios from "axios"
 import { useRouter } from "next/router"
+import axios from "axios"
+
+import { IWorker, IWorkerChangeRespose } from "@/types/types"
+
+import Cashier from "./Cashier"
+import styles from "@/styles/Home.module.css"
 
 interface InputProps {
     workers: IWorker[]

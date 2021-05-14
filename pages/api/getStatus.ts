@@ -1,15 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next"
 
-import { useParser } from "../../hooks/usePareser"
-import { sendData } from "../../hooks/useGetData"
+import { useParser } from "@/hooks/usePareser"
+import { sendData } from "@/hooks/useGetData"
+import { getSystemInfo } from "schemas/schema"
 
 const getStatus = async () => {
-    const xmlQuery = `<?xml version="1.0" encoding="utf-8"?>
-    <RK7Query>
-      <RK7Command2 CMD="GetSystemInfo" />
-     
-  </RK7Query>`
-    return await sendData(xmlQuery)
+    const schema = getSystemInfo()
+
+    return await sendData(schema)
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

@@ -11,7 +11,7 @@ const Header: FC<HeaderInputProps> = ({ serverState }) => {
             <a href="/" className={styles.title}>
                 Настройка кассиров
             </a>
-            <div style={{ flexGrow: 1 }}></div>
+            <div className="bulk"></div>
 
             {serverState ? (
                 <div className={styles.statusBlock}>

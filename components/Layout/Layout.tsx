@@ -1,8 +1,8 @@
 import Head from "next/head"
-import { useRouter } from "next/router"
 import React, { FC } from "react"
-import styles from "../../styles/Home.module.css"
-import Header from "../Header/Header"
+
+import styles from "@/styles/Home.module.css"
+import Header from "@/components/Header/Header"
 interface LayoutInputProps {
     serverState?: boolean
     children: any

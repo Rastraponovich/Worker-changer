@@ -1,6 +1,7 @@
 import React from "react"
 import { Path, UseFormRegister } from "react-hook-form"
-import styles from "../../styles/Home.module.css"
+
+import styles from "@/styles/Home.module.css"
 
 interface IFormValues {
     name: string

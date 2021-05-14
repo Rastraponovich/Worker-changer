@@ -1,5 +1,6 @@
-import "../styles/globals.css"
-import { ThingsProvider } from "../components/App/ThingsContext"
+import "@/styles/globals.css"
+import { ThingsProvider } from "@/components/App/ThingsContext"
+
 function MyApp({ Component, pageProps }) {
     return (
         <ThingsProvider value={{}}>

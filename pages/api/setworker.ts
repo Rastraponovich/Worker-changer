@@ -1,21 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { IAuth, IWorker } from "../../types/types"
-import { sendData } from "../../hooks/useGetData"
-import { useParser } from "../../hooks/usePareser"
+import { IAuth, IWorker } from "@/types/types"
+import { sendData } from "@/hooks/useGetData"
+import { useParser } from "@/hooks/usePareser"
+import { setWorker } from "schemas/schema"
 
 const handleSave = async (worker: IWorker) => {
-    const xmlQuery = `<?xml version="1.0" encoding="utf-8"?>
-    <RK7Query>
-      <RK7Command2 CMD="SetRefData" RefName="Employees">
-        <Items>
-            <Item 
-              GUIDString="${worker.GUIDString}" 
-              genTaxPayerIdNum="${worker.genTaxPayerIdNum}"
-              OfficialName="${worker.OfficialName}"/>
-        </Items>
-    </RK7Command2>
-  </RK7Query>`
-    return await sendData(xmlQuery)
+    const schema = setWorker(worker)
+    return await sendData(schema)
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

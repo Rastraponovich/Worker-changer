@@ -1,6 +1,6 @@
 import * as parser from "fast-xml-parser"
 import he from "he"
-import { ParserInputProps } from "../types/types"
+import { ParserInputProps } from "@/types/types"
 
 const arrayObjOptions = {
     attributeNamePrefix: "",
@@ -21,7 +21,7 @@ const arrayObjOptions = {
     stopNodes: ["parse-me-as-string"],
 }
 
-export const useParser: ParserInputProps = (xmlData) => {
+export const useParser: ParserInputProps = (xmlData): any => {
     let jsonObj = {}
 
     if (parser.validate(xmlData) === true) {

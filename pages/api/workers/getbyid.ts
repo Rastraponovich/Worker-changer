@@ -1,17 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { sendData } from "../../../hooks/useGetData"
-import { useParser } from "../../../hooks/usePareser"
+import { sendData } from "@/hooks/useGetData"
+import { useParser } from "@/hooks/usePareser"
+import { getEmployeesByGuid } from "@/schemas/schema"
 
 const getUserByGuid = async (guid: string | string[]) => {
-    const xmlQuery = `<?xml version="1.0" encoding="utf-8"?>
-    <RK7Query>
-      <RK7Command2 CMD="GetRefData" RefName="Employees" WithMacroProp="1" PropMask="items.(Code,Name,Ident,genTaxPayerIdNum,OfficialName,Status, GUIDString)" >
-        <PROPFILTERS>
-            <PROPFILTER name="GUIDString" value="${guid}" />
-        </PROPFILTERS>
-    </RK7Command2>
-  </RK7Query>`
-    return await sendData(xmlQuery)
+    const schema = getEmployeesByGuid(guid)
+
+    return await sendData(schema)
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

@@ -1,16 +1,19 @@
-import styles from "../styles/Home.module.css"
 import axios from "axios"
-
-import { GetServerSideProps } from "next"
-import { InputProps, IWorker } from "../types/types"
-import { useEffect, useState } from "react"
-import { useParser } from "../hooks/usePareser"
-import { sendData } from "../hooks/useGetData"
 import { useRouter } from "next/router"
-import Layout from "../components/Layout/Layout"
-import CashierForm from "../components/CashierForm/CashierForm"
-import Modal from "../components/Modal/Modal"
-import NoData from "../components/NoData/NoData"
+import { GetServerSideProps } from "next"
+import { useEffect, useState } from "react"
+
+import { InputProps, IWorker } from "@/types/types"
+import { useParser } from "@/hooks/usePareser"
+import { sendData } from "@/hooks/useGetData"
+
+import Layout from "@/components/Layout/Layout"
+import CashierForm from "@/components/CashierForm/CashierForm"
+import Modal from "@/components/Modal/Modal"
+import NoData from "@/components/NoData/NoData"
+
+import styles from "@/styles/Home.module.css"
+import { getEmployees } from "schemas/schema"
 
 const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
     const router = useRouter()
@@ -74,7 +77,7 @@ const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
                 ) : (
                     <NoData />
                 )}
-                <div style={{ flexGrow: 1 }} />
+                <div className="bulk" />
             </section>
             <Modal show={showModal} onClose={handleOpenModal}>
                 <p>{modalMessage}</p>
@@ -86,18 +89,11 @@ const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
     )
 }
 export default Home
-//PropMask="items.(Code,Name,Ident,genTaxPayerIdNum,OfficialName,Status, GUIDString)"
-export const getServerSideProps: GetServerSideProps = async () => {
-    const xmlQuery = `<?xml version="1.0" encoding="windows-1251"?>
-    <RK7Query>
-        <RK7Command2 CMD="GetRefData" RefName="EMPLOYEES" WithMacroProp="1" PropMask="items.(Code,Name,Ident,genTaxPayerIdNum,OfficialName,Status, GUIDString)" >
-            <PROPFILTERS>
-                <PROPFILTER name="MainParentIdent" value="${process.env.MAINPARENTIDENT}"/>
 
-            </PROPFILTERS>
-        </RK7Command2>
-    </RK7Query>`
-    const res = await sendData(xmlQuery)
+export const getServerSideProps: GetServerSideProps = async () => {
+    const schema = getEmployees()
+
+    const res = await sendData(schema)
     const response = useParser(res)
 
     if (response?.RK7QueryResult) {
