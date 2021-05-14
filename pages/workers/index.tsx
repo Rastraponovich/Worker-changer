@@ -1,9 +1,9 @@
 import React from "react"
+import { GetServerSideProps } from "next"
 import { useRouter } from "next/router"
 import WorkerCard from "../../components/WorkerCard/WorkerCard"
 import { IWorker } from "../../types/types"
 import styles from "../../styles/Home.module.css"
-import { GetServerSideProps } from "next"
 import { sendData } from "../../hooks/useGetData"
 import { useParser } from "../../hooks/usePareser"
 

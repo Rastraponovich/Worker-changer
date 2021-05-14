@@ -1,5 +1,5 @@
-const parser = require("fast-xml-parser")
-const he = require("he")
+import * as parser from "fast-xml-parser"
+import he from "he"
 import { ParserInputProps } from "../types/types"
 
 const arrayObjOptions = {

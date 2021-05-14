@@ -11,7 +11,6 @@ import Layout from "../components/Layout/Layout"
 import CashierForm from "../components/CashierForm/CashierForm"
 import Modal from "../components/Modal/Modal"
 import NoData from "../components/NoData/NoData"
-import classes from "../styles/Home.module.css"
 
 const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
     const router = useRouter()
@@ -49,7 +48,7 @@ const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
     return (
         <Layout serverState={serverState}>
             <section>
-                <ul className={classes.info}>
+                <ul className={styles.info}>
                     <li>Выберите кассира из выпадающего списка</li>
                     <li>После выбора нажмите изменить</li>
                     <li>текущий кассир в списке отражен курсивом</li>
