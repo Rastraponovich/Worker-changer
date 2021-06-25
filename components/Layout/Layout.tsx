@@ -3,11 +3,15 @@ import React, { FC } from "react"
 
 import styles from "@/styles/Home.module.css"
 import Header from "@/components/Header/Header"
+import Footer from "@/components/Footer/Footer"
+import { IStatus } from "@/types/types"
+
 interface LayoutInputProps {
     serverState?: boolean
     children: any
+    status?: IStatus
 }
-const Layout: FC<LayoutInputProps> = ({ serverState, children }) => {
+const Layout: FC<LayoutInputProps> = ({ serverState, children, status }) => {
     return (
         <div className={styles.wrapper}>
             <Head>
@@ -18,6 +22,7 @@ const Layout: FC<LayoutInputProps> = ({ serverState, children }) => {
             <div className={styles.container}>
                 <main className={styles.main}>{children}</main>
             </div>
+            <Footer status={status} />
         </div>
     )
 }

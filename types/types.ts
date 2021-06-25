@@ -38,7 +38,7 @@ interface ICommandResult {
     Status: string
     WorkTime: number
 }
-interface IQueryResult {
+export interface IQueryResult {
     ServerVersion: string
     XmlVersion: number
     NetName: string

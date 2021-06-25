@@ -12,18 +12,25 @@ const agent = new Agent({
     rejectUnauthorized: false,
     secureProtocol: "TLSv1_method",
 })
-export const sendData = async (xmlQuery: string): Promise<any> => {
+export const sendData = async (xmlQuery: string): Promise<string | any> => {
     try {
         const URL = process.env.RK7_URL
         const request = await axios.post(URL, xmlQuery, {
             httpsAgent: agent,
             auth: credentials,
+            timeout: 3000,
             headers: {
                 "Content-Type": "text/xml",
             },
         })
-        return request.data
+        return { error: false, data: request.data }
     } catch (error) {
-        return error
+        const { isAxiosError, code } = error
+
+        return {
+            error: true,
+            isAxiosError,
+            code,
+        }
     }
 }

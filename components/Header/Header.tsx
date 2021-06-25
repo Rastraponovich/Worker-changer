@@ -1,6 +1,6 @@
-import React, { FC } from "react"
-import styles from "../../styles/Header.module.css"
-
+import React, { FC, memo } from "react"
+import styles from "@/styles/Header.module.css"
+import HeaderStatusIndicator from "@/components/Header/HeaderStatusIndicator"
 interface HeaderInputProps {
     serverState: boolean
 }
@@ -12,21 +12,9 @@ const Header: FC<HeaderInputProps> = ({ serverState }) => {
                 Настройка кассиров
             </a>
             <div className="bulk"></div>
-
-            {serverState ? (
-                <div className={styles.statusBlock}>
-                    <span>Статус сервера: Работает</span>
-                    <span className={styles.circleActive}></span>
-                </div>
-            ) : (
-                <div className={styles.statusBlock}>
-                    <span>Статус сервера: не работает</span>
-
-                    <span className={styles.circleInActive}></span>
-                </div>
-            )}
+            <HeaderStatusIndicator state={serverState} styles={styles} />
         </header>
     )
 }
 
-export default Header
+export default memo(Header)
