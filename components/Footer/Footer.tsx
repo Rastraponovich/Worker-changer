@@ -1,6 +1,6 @@
-import React, { FC, memo, useEffect, useState } from "react"
+import React, { FC, memo, useContext, useEffect, useState } from "react"
 import { IStatus } from "@/types/types"
-import styles from "@/styles/Footer.module.css"
+import ThingsContext from "../App/ThingsContext"
 
 interface InputProps {
     status?: IStatus
@@ -8,6 +8,7 @@ interface InputProps {
 
 const Footer: FC<InputProps> = ({ status }) => {
     const [time, setTime] = useState("")
+    const context = useContext(ThingsContext)
 
     useEffect(() => {
         setInterval(() => {
@@ -17,7 +18,7 @@ const Footer: FC<InputProps> = ({ status }) => {
     }, [status])
 
     return (
-        <footer className={styles.footer}>
+        <footer style={context.theme.footer}>
             <span>Версия сервера: {status.ServerVersion}</span>
             <span>Имя сервера: {status.NetName}</span>
             <span>{time}</span>

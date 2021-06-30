@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios"
 import { useRouter } from "next/router"
-import { GetServerSideProps } from "next"
-import { useCallback, useEffect, useState } from "react"
+import { GetServerSideProps, GetStaticProps } from "next"
+import React, { useCallback, useContext, useEffect, useState } from "react"
 
 import { InputProps, IWorker } from "@/types/types"
 import { useParser } from "@/hooks/usePareser"
@@ -15,8 +15,11 @@ import CashierBlock from "@/components/CashierBlock/CashierBlock"
 import Button from "@/components/UI/Button/Button"
 import styles from "@/styles/Home.module.css"
 import { getEmployees } from "schemas/schema"
+import ThingsContext from "@/components/App/ThingsContext"
 
 const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
+    const context = useContext(ThingsContext)
+
     const router = useRouter()
     const [showModal, setShowModal] = useState(false)
     const [modalMessage, setModalMessage] = useState("")
@@ -33,9 +36,10 @@ const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
 
     useEffect(() => {
         setInterval(() => {
+            console.log("refresh")
             refreshStatus()
         }, 30000)
-    }, [status])
+    }, [])
 
     const handleShowModal = useCallback(
         (text: string) => {
@@ -76,7 +80,7 @@ const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
 }
 export default Home
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
     const employeesSchema = getEmployees()
 
     const employeesData: {
@@ -105,6 +109,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
                 status,
                 commandResult,
             },
+            revalidate: 6000,
         }
     } else {
         return {
@@ -112,7 +117,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
                 status: {
                     Status: "no ok",
                     isAxiosError,
-                    text: code,
+                    text: code || "",
                 },
             },
         }

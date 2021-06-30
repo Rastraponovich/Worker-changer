@@ -1,5 +1,5 @@
 import Head from "next/head"
-import React, { FC } from "react"
+import React, { FC, memo } from "react"
 
 import styles from "@/styles/Home.module.css"
 import Header from "@/components/Header/Header"
@@ -27,4 +27,4 @@ const Layout: FC<LayoutInputProps> = ({ serverState, children, status }) => {
     )
 }
 
-export default Layout
+export default memo(Layout)

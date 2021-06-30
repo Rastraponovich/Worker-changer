@@ -1,0 +1,10 @@
+{
+  "/404": "pages/404.html",
+  "/_app": "pages/_app.js",
+  "/api/getStatus": "pages/api/getStatus.js",
+  "/api/setworker": "pages/api/setworker.js",
+  "/api/workers/getbyid": "pages/api/workers/getbyid.js",
+  "/": "pages/index.js",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js"
+}

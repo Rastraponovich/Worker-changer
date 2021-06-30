@@ -1,13 +1,22 @@
-import React, { FC, memo } from "react"
+import React, {
+    FC,
+    memo,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+} from "react"
 import styles from "@/styles/Header.module.css"
 import HeaderStatusIndicator from "@/components/Header/HeaderStatusIndicator"
-interface HeaderInputProps {
+import ThingsContext, { IContextTheme } from "../App/ThingsContext"
+interface InputProps {
     serverState: boolean
 }
 
-const Header: FC<HeaderInputProps> = ({ serverState }) => {
+const Header: FC<InputProps> = ({ serverState }) => {
+    const context = useContext(ThingsContext)
     return (
-        <header className={styles.header}>
+        <header style={context.theme.header}>
             <a href="/" className={styles.title}>
                 Настройка кассиров
             </a>

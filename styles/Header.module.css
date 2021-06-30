@@ -33,13 +33,9 @@
     margin: 0 0.5rem 0 0;
 }
 
-@media (min-width: 576px) {
-    .header {
+@media (max-width: 576px) {
+    .circleActive,
+    .circleInActive {
         display: none;
-    }
-}
-@media (min-width: 992px) {
-    .header {
-        display: flex;
     }
 }
