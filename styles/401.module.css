@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+    align-items: center;
+    color: #fff;
+}
+
+.title {
+    margin: 0 0 1rem 0;
+}
+.subtitle {
+    margin: 0 0 1rem 0;
+}
+.content {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    align-items: center;
+}
+.text {
+    margin: 0 0 1rem 0;
+}

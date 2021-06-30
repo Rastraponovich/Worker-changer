@@ -10,10 +10,13 @@ const Page404: NextPage = () => {
                 justifyContent: "center",
                 color: "#fff",
                 height: "100vh",
+                flexWrap: "wrap",
             }}
         >
-            <h1>Ошибка 404</h1>
-            <p>Страница не найдена. Свяжитесь +79182086821</p>
+            <h1 style={{ width: "100%", textAlign: "center" }}>Ошибка 404</h1>
+            <p style={{ width: "100%", textAlign: "center" }}>
+                Страница не найдена. Свяжитесь +79182086821
+            </p>
         </div>
     )
 }

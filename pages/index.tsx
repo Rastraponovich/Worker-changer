@@ -87,9 +87,16 @@ export const getStaticProps: GetStaticProps = async () => {
         error: boolean
         data: string
         isAxiosError?: boolean
-        code?: string
+        code?: string | number
     } = await sendData(employeesSchema)
     const { error, data, isAxiosError, code } = employeesData
+
+    if (code === 401) {
+        return {
+            redirect: { destination: "401", statusCode: 301 },
+            props: {},
+        }
+    }
 
     if (!error) {
         const response = useParser(data)
@@ -109,7 +116,7 @@ export const getStaticProps: GetStaticProps = async () => {
                 status,
                 commandResult,
             },
-            revalidate: 6000,
+            revalidate: 30,
         }
     } else {
         return {

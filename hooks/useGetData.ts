@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios, { AxiosError, AxiosInterceptorManager } from "axios"
 import { Agent } from "https"
 
 import { IAuth } from "@/types/types"
@@ -25,12 +25,11 @@ export const sendData = async (xmlQuery: string): Promise<string | any> => {
         })
         return { error: false, data: request.data }
     } catch (error) {
-        const { isAxiosError, code } = error
-
+        const { isAxiosError, code, request } = error
         return {
             error: true,
             isAxiosError,
-            code,
+            code: code || error.response.status || null,
         }
     }
 }
