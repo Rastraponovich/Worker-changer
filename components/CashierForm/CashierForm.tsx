@@ -36,8 +36,8 @@ const CashierForm: React.FC<InputProps> = ({
         workers.find((item) => item.Name === "Кассир ИП")
     )
 
-    const [newIP, setNewIP] = useState(bulkWorker)
-    const [newOOO, setNewOOO] = useState(bulkWorker)
+    const [newIP, setNewIP] = useState<IWorker>(bulkWorker)
+    const [newOOO, setNewOOO] = useState<IWorker>(bulkWorker)
 
     const [emp, setEmp] = useState(
         workers.filter(
@@ -51,7 +51,6 @@ const CashierForm: React.FC<InputProps> = ({
     const handleChange = (event: any) => {
         const { id, value } = event.target
         const worker = emp.find((workerItem) => value === workerItem.GUIDString)
-        // console.log(worker)
         if (id === "OOO") {
             if (worker) {
                 setNewOOO({ ...worker, GUIDString: workerOOO.GUIDString })
@@ -73,7 +72,7 @@ const CashierForm: React.FC<InputProps> = ({
             data: IWorkerChangeRespose
         } = await axios.post("/api/setworker", { worker })
 
-        if (result.data.commandResult.Status === "Ok") {
+        if (!result.data.error) {
             showModal(
                 `Кассир ${type} изменен. Перезагрузите страницу`,
                 "refresh"

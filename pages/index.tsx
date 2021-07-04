@@ -1,9 +1,9 @@
 import axios, { AxiosResponse } from "axios"
 import { useRouter } from "next/router"
-import { GetServerSideProps, GetStaticProps } from "next"
-import React, { useCallback, useContext, useEffect, useState } from "react"
+import { GetStaticProps } from "next"
+import React, { useCallback, useEffect, useState } from "react"
 
-import { InputProps, IWorker } from "@/types/types"
+import { IEmployeesData, InputProps, IWorker } from "@/types/types"
 import { useParser } from "@/hooks/usePareser"
 import { sendData } from "@/hooks/useGetData"
 
@@ -12,14 +12,11 @@ import Modal from "@/components/Modal/Modal"
 
 import InfoBlock from "@/components/InfoBlock/InfoBlock"
 import CashierBlock from "@/components/CashierBlock/CashierBlock"
-import Button from "@/components/UI/Button/Button"
 import styles from "@/styles/Home.module.css"
 import { getEmployees } from "schemas/schema"
-import ThingsContext from "@/components/App/ThingsContext"
+import { checkCashier } from "lib/checkCashier"
 
 const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
-    const context = useContext(ThingsContext)
-
     const router = useRouter()
     const [showModal, setShowModal] = useState(false)
     const [modalMessage, setModalMessage] = useState("")
@@ -81,17 +78,14 @@ const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
 export default Home
 
 export const getStaticProps: GetStaticProps = async () => {
-    const employeesSchema = getEmployees()
+    console.log(await (await checkCashier("Кассир ИП")).message)
+    console.log(await (await checkCashier("Кассир ООО")).message)
 
-    const employeesData: {
-        error: boolean
-        data: string
-        isAxiosError?: boolean
-        code?: string | number
-    } = await sendData(employeesSchema)
+    const employeesSchema = getEmployees()
+    const employeesData: IEmployeesData = await sendData(employeesSchema)
     const { error, data, isAxiosError, code } = employeesData
 
-    if (code === 401) {
+    if (error && code === 401) {
         return {
             redirect: { destination: "401", statusCode: 301 },
             props: {},
@@ -99,8 +93,7 @@ export const getStaticProps: GetStaticProps = async () => {
     }
 
     if (!error) {
-        const response = useParser(data)
-        const { CommandResult, ...status } = response.RK7QueryResult[0]
+        const { CommandResult, ...status } = useParser(data).RK7QueryResult[0]
         const {
             SourceCommand,
             RK7Reference,
@@ -110,6 +103,7 @@ export const getStaticProps: GetStaticProps = async () => {
         const workers: IWorker[] = RK7Reference[0].Items[0].Item.filter(
             (worker: IWorker) => worker.Status !== "rsDeleted"
         )
+
         return {
             props: {
                 workers,

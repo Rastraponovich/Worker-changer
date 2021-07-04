@@ -23,12 +23,18 @@ export const sendData = async (xmlQuery: string): Promise<string | any> => {
                 "Content-Type": "text/xml",
             },
         })
-        return { error: false, data: request.data }
+        return {
+            error: false,
+            data: request.data,
+            isAxiosError: false,
+            code: null,
+        }
     } catch (error) {
         const { isAxiosError, code, request } = error
         return {
             error: true,
             isAxiosError,
+            data: "",
             code: code || error.response.status || null,
         }
     }

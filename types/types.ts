@@ -48,10 +48,26 @@ export interface IQueryResult {
 }
 
 export interface IWorkerChangeRespose {
-    commandResult: ICommandResult
-    queryResult: IQueryResult
+    commandResult?: ICommandResult
+    queryResult?: IQueryResult
+    error: boolean
+    message: string
 }
 
 export interface ParserInputProps {
     (xmlData: string): any
+}
+
+export interface IEmployeesData {
+    error: boolean
+    data: string
+    isAxiosError?: boolean
+    code?: string | number
+}
+
+export interface IResponse {
+    error: boolean
+    data: string
+    isAxiosError: boolean
+    code: null | number | string
 }
