@@ -1,6 +1,6 @@
 import React, { FC, memo, useEffect } from "react"
 
-import CashierForm from "@/components/CashierForm/CashierForm"
+import CashierList from "@/components/CashierForm/CashierList"
 import NoData from "@/components/NoData/NoData"
 import { IWorker } from "@/types/types"
 import { useRouter } from "next/router"
@@ -14,7 +14,7 @@ interface InputProps {
     }
 }
 
-const CashierBlock: FC<InputProps> = ({
+const CashiersBlock: FC<InputProps> = ({
     state,
     workers,
     showModal,
@@ -30,7 +30,7 @@ const CashierBlock: FC<InputProps> = ({
     return (
         <section className={styles.section}>
             {state ? (
-                <CashierForm
+                <CashierList
                     workers={workers}
                     showModal={showModal}
                     serverState={state}
@@ -43,4 +43,4 @@ const CashierBlock: FC<InputProps> = ({
     )
 }
 
-export default memo(CashierBlock)
+export default memo(CashiersBlock)

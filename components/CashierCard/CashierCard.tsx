@@ -16,7 +16,7 @@ interface InputProps {
     serverState: boolean
 }
 
-const Cashier: FC<InputProps> = (props) => {
+const CashierCard: FC<InputProps> = (props) => {
     const {
         worker,
         title,
@@ -114,4 +114,4 @@ const Cashier: FC<InputProps> = (props) => {
     )
 }
 
-export default memo(Cashier)
+export default memo(CashierCard)

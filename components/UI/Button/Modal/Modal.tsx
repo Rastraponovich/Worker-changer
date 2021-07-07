@@ -1,18 +1,15 @@
-import React, { useEffect, useState } from "react"
-import styles from "@/styles/Home.module.css"
+import React, { FC, ReactNode, useEffect, useState } from "react"
+import styles from "@/styles/Modal.module.css"
+import { memo } from "react"
 
 interface InputProps {
     show: boolean
     autoClose?: number
-    onClose?: Function
+    onClose?: () => void
+    children: ReactNode
 }
 
-const Modal: React.FC<InputProps> = ({
-    children,
-    show,
-    onClose,
-    autoClose,
-}) => {
+const Modal: FC<InputProps> = ({ children, show, onClose, autoClose }) => {
     const [open, setOpen] = useState(show)
 
     useEffect(() => {
@@ -33,18 +30,18 @@ const Modal: React.FC<InputProps> = ({
     // }
 
     const handleClose = (event: React.MouseEvent<HTMLDivElement>) => {
-        // event.preventDefault()
+        event.preventDefault()
         event.stopPropagation()
         onClose()
     }
     return (
         <div
-            className={styles.modal}
+            className={styles.wrapper}
             style={{ display: !open ? "none" : "inherit" }}
             onClick={handleClose}
         >
-            <div className={styles.modalWrapper}></div>
-            <div className={styles.modalTextBlock}>
+            <div className={styles.fade}></div>
+            <div className={styles.content}>
                 {children}
                 {/* <p>{text}</p>
                 <button className={styles.modalButton} onClick={handleClick}>
@@ -55,4 +52,4 @@ const Modal: React.FC<InputProps> = ({
     )
 }
 
-export default Modal
+export default memo(Modal)

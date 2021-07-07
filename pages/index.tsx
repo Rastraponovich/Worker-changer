@@ -8,10 +8,10 @@ import { useParser } from "@/hooks/usePareser"
 import { sendData } from "@/hooks/useGetData"
 
 import Layout from "@/components/Layout/Layout"
-import Modal from "@/components/Modal/Modal"
+import Modal from "@/components/UI/Button/Modal/Modal"
 
 import InfoBlock from "@/components/InfoBlock/InfoBlock"
-import CashierBlock from "@/components/CashierBlock/CashierBlock"
+import CashierBlock from "@/components/CashiersBlock/CashiersBlock"
 import styles from "@/styles/Home.module.css"
 import { getEmployees } from "schemas/schema"
 import { checkCashier } from "lib/checkCashier"
