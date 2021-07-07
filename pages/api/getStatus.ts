@@ -13,11 +13,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             ...result,
         })
     } else {
-        const data = useParser(result.data)
-
-        const { CommandResult, ...queryResult } = data.RK7QueryResult[0]
+        const { CommandResult, ...queryResult } = useParser(
+            result.data
+        ).RK7QueryResult[0]
 
         res.status(200).json({
+            error: false,
+            message: "",
             queryResult,
             commandResult: CommandResult[0],
         })

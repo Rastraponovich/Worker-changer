@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios"
 import { useRouter } from "next/router"
-import { GetStaticProps } from "next"
+import { GetServerSideProps, GetStaticProps, NextPage } from "next"
 import React, { useCallback, useEffect, useState } from "react"
 
 import { IEmployeesData, InputProps, IWorker } from "@/types/types"
@@ -16,7 +16,7 @@ import styles from "@/styles/Home.module.css"
 import { getEmployees } from "schemas/schema"
 import { checkCashier } from "lib/checkCashier"
 
-const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
+const Home: NextPage<InputProps> = ({ workers, status, commandResult }) => {
     const router = useRouter()
     const [showModal, setShowModal] = useState(false)
     const [modalMessage, setModalMessage] = useState("")
@@ -77,9 +77,9 @@ const Home: React.FC<InputProps> = ({ workers, status, commandResult }) => {
 }
 export default Home
 
-export const getStaticProps: GetStaticProps = async () => {
-    console.log(await (await checkCashier("Кассир ИП")).message)
-    console.log(await (await checkCashier("Кассир ООО")).message)
+export const getServerSideProps: GetServerSideProps = async () => {
+    // console.log(await (await checkCashier("Кассир ИП")).message)
+    // console.log(await (await checkCashier("Кассир ООО")).message)
 
     const employeesSchema = getEmployees()
     const employeesData: IEmployeesData = await sendData(employeesSchema)
@@ -101,8 +101,12 @@ export const getStaticProps: GetStaticProps = async () => {
         } = CommandResult[0]
 
         const workers: IWorker[] = RK7Reference[0].Items[0].Item.filter(
-            (worker: IWorker) => worker.Status !== "rsDeleted"
+            (worker: IWorker) =>
+                worker.Status !== "rsDeleted" &&
+                worker.OfficialName.length > 0 &&
+                worker.genTaxPayerIdNum
         )
+        console.log(workers)
 
         return {
             props: {
@@ -110,7 +114,6 @@ export const getStaticProps: GetStaticProps = async () => {
                 status,
                 commandResult,
             },
-            revalidate: 30,
         }
     } else {
         return {

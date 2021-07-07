@@ -6,24 +6,23 @@ import Header from "@/components/Header/Header"
 import Footer from "@/components/Footer/Footer"
 import { IStatus } from "@/types/types"
 
-interface LayoutInputProps {
+interface InputProps {
     serverState?: boolean
     children: any
     status?: IStatus
 }
-const Layout: FC<LayoutInputProps> = ({ serverState, children, status }) => {
+const Layout: FC<InputProps> = ({ serverState, children, status }) => {
     return (
-        <div className={styles.wrapper}>
+        <>
             <Head>
                 <title>WorkerChanger</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header serverState={serverState} />
-            <div className={styles.container}>
-                <main className={styles.main}>{children}</main>
-            </div>
+            <main className={styles.main}>{children}</main>
+            <div className="bulk"></div>
             <Footer status={status} />
-        </div>
+        </>
     )
 }
 

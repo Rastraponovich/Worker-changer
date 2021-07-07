@@ -30,7 +30,7 @@ export interface InputProps {
     username: string
 }
 
-interface ICommandResult {
+export interface ICommandResult {
     CMD: string
     SourceCommand: []
     DateTime: Date
@@ -70,4 +70,15 @@ export interface IResponse {
     data: string
     isAxiosError: boolean
     code: null | number | string
+}
+
+export interface IStatusResponse {
+    error: boolean
+    message: string
+    queryResult?: IQueryResult
+    commandResult?: ICommandResult
+}
+
+export interface ICasierResponse extends IResponse {
+    message: string
 }

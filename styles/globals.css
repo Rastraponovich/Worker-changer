@@ -14,6 +14,11 @@ a {
 .bulk {
     flex-grow: 1;
 }
+#__next {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
 * {
     box-sizing: border-box;
 }

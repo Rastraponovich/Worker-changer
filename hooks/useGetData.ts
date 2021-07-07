@@ -31,6 +31,7 @@ export const sendData = async (xmlQuery: string): Promise<string | any> => {
         }
     } catch (error) {
         const { isAxiosError, code, request } = error
+        console.log(error)
         return {
             error: true,
             isAxiosError,
