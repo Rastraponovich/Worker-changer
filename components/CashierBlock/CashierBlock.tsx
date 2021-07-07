@@ -1,8 +1,9 @@
-import React, { FC, memo } from "react"
+import React, { FC, memo, useEffect } from "react"
 
 import CashierForm from "@/components/CashierForm/CashierForm"
 import NoData from "@/components/NoData/NoData"
 import { IWorker } from "@/types/types"
+import { useRouter } from "next/router"
 
 interface InputProps {
     state: boolean
@@ -19,6 +20,13 @@ const CashierBlock: FC<InputProps> = ({
     showModal,
     styles,
 }) => {
+    // const { push } = useRouter()
+    // useEffect(() => {
+    //     if (!state) {
+    //         push("/404")
+    //     }
+    // }, [state])
+
     return (
         <section className={styles.section}>
             {state ? (

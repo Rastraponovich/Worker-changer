@@ -36,7 +36,7 @@ const Cashier: FC<InputProps> = (props) => {
     const [diff, setDiff] = useState(false)
 
     useEffect(() => {
-        if (worker.GUIDString !== selectedWorker.GUIDString) {
+        if (worker.Ident !== selectedWorker.Ident) {
             setDiff(true)
         } else {
             setDiff(false)

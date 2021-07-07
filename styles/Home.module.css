@@ -228,9 +228,11 @@
 }
 .errorBlock {
     display: flex;
+    position: absolute;
     flex-direction: column;
-    flex-grow: 23;
     justify-content: center;
+    height: 50%;
+    width: 100%;
     align-items: center;
     padding: 0 2rem;
 }
@@ -270,9 +272,7 @@
     .circleInActive {
         display: none;
     }
-    .errorMessage {
-        color: #293048;
-    }
+
     .title {
         color: #293048;
         display: none;
