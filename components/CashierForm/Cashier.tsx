@@ -1,4 +1,4 @@
-import React from "react"
+import React, { FC, memo, useEffect, useState } from "react"
 import { IWorker } from "@/types/types"
 import styles from "@/styles/Cashier.module.css"
 
@@ -6,9 +6,9 @@ import axios from "axios"
 
 interface InputProps {
     worker: IWorker
-    data?: IWorker
+    selectedWorker?: IWorker
     title: string
-    emp: IWorker[]
+    employeesArray: IWorker[]
     change: Function
     type: string
     onSave: Function
@@ -16,23 +16,32 @@ interface InputProps {
     serverState: boolean
 }
 
-const Cashier: React.FC<InputProps> = (props) => {
+const Cashier: FC<InputProps> = (props) => {
     const {
         worker,
         title,
-        emp,
-        data,
+        employeesArray,
+        selectedWorker,
         change,
         type,
         onSave,
         showModal,
         serverState,
     } = props
-
     const handleSave = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
-        onSave(data, type)
+        onSave(selectedWorker, type)
     }
+
+    const [diff, setDiff] = useState(false)
+
+    useEffect(() => {
+        if (worker.GUIDString !== selectedWorker.GUIDString) {
+            setDiff(true)
+        } else {
+            setDiff(false)
+        }
+    }, [selectedWorker])
 
     const handleGetInfo = async (
         event: React.MouseEvent<HTMLButtonElement>
@@ -59,11 +68,11 @@ const Cashier: React.FC<InputProps> = (props) => {
             <span>ФИО: {worker.OfficialName}</span>
             <span>ИНН: {worker.genTaxPayerIdNum}</span>
             <hr />
-            {data.GUIDString.length > 0 ? (
+            {diff ? (
                 <div className={styles.inform}>
                     <h3>Кассир поменяется на:</h3>
-                    <span>ФИО: {data.OfficialName}</span>
-                    <span>ИНН: {data.genTaxPayerIdNum}</span>
+                    <span>ФИО: {selectedWorker.OfficialName}</span>
+                    <span>ИНН: {selectedWorker.genTaxPayerIdNum}</span>
                 </div>
             ) : null}
             <select
@@ -72,13 +81,13 @@ const Cashier: React.FC<InputProps> = (props) => {
                 className={styles.input}
             >
                 <option
-                    value={worker.GUIDString}
+                    value={worker?.GUIDString}
                     className={styles.currentOption}
                 >
                     {worker.OfficialName} : {worker.genTaxPayerIdNum}
                 </option>
-                {emp.length > 0
-                    ? emp
+                {employeesArray.length > 0
+                    ? employeesArray
                           .filter(
                               (item) =>
                                   item.genTaxPayerIdNum !==
@@ -96,7 +105,7 @@ const Cashier: React.FC<InputProps> = (props) => {
                           ))
                     : null}
             </select>
-            {serverState ? (
+            {diff ? (
                 <button onClick={handleSave} className={styles.submit}>
                     Изменить
                 </button>
@@ -105,4 +114,4 @@ const Cashier: React.FC<InputProps> = (props) => {
     )
 }
 
-export default React.memo(Cashier)
+export default memo(Cashier)

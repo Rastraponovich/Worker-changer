@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios"
 import { useRouter } from "next/router"
 import { GetServerSideProps, GetStaticProps, NextPage } from "next"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 
 import { IEmployeesData, InputProps, IWorker } from "@/types/types"
 import { useParser } from "@/hooks/usePareser"
@@ -19,6 +19,7 @@ import { checkCashier } from "lib/checkCashier"
 const Home: NextPage<InputProps> = ({ workers, status, commandResult }) => {
     const router = useRouter()
     const [showModal, setShowModal] = useState(false)
+
     const [modalMessage, setModalMessage] = useState("")
     const [serverState, setServerState] = useState(status.Status === "Ok")
 
@@ -30,6 +31,7 @@ const Home: NextPage<InputProps> = ({ workers, status, commandResult }) => {
             setServerState(true)
         }
     }
+    const memoWorkers = useMemo(() => workers, [workers])
 
     useEffect(() => {
         setInterval(() => {
@@ -61,7 +63,7 @@ const Home: NextPage<InputProps> = ({ workers, status, commandResult }) => {
         <Layout serverState={serverState} status={status}>
             <InfoBlock styles={styles} show={serverState} />
             <CashierBlock
-                workers={workers}
+                workers={memoWorkers}
                 styles={styles}
                 showModal={handleShowModal}
                 state={serverState}
@@ -99,14 +101,13 @@ export const getServerSideProps: GetServerSideProps = async () => {
             RK7Reference,
             ...commandResult
         } = CommandResult[0]
-
         const workers: IWorker[] = RK7Reference[0].Items[0].Item.filter(
             (worker: IWorker) =>
-                worker.Status !== "rsDeleted" &&
-                worker.OfficialName.length > 0 &&
-                worker.genTaxPayerIdNum
+                worker.Status === "rsActive" &&
+                worker.genTaxPayerIdNum &&
+                worker.OfficialName
         )
-        console.log(workers)
+        //
 
         return {
             props: {

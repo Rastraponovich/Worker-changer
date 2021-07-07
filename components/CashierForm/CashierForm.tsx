@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { FC, useCallback, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import axios from "axios"
 
@@ -23,51 +23,50 @@ const bulkWorker: IWorker = {
     GUIDString: "",
 }
 
-const CashierForm: React.FC<InputProps> = ({
-    workers,
-    showModal,
-    serverState,
-}) => {
-    const router = useRouter()
-    const [workerOOO, setWorkerOOO] = useState(
-        workers.find((item) => item.Name === "Кассир ООО")
+const CashierForm: FC<InputProps> = ({ workers, showModal, serverState }) => {
+    const workerOOO = useMemo(
+        () => workers.find((item) => item.Name === "Кассир ООО"),
+        [workers]
     )
-    const [workerIP, setWorkerIP] = useState(
-        workers.find((item) => item.Name === "Кассир ИП")
+    const workerIP = useMemo(
+        () => workers.find((item) => item.Name === "Кассир ИП"),
+        [workers]
     )
 
-    const [newIP, setNewIP] = useState<IWorker>(bulkWorker)
-    const [newOOO, setNewOOO] = useState<IWorker>(bulkWorker)
+    const [newIP, setNewIP] = useState<IWorker>(workerIP)
+    const [newOOO, setNewOOO] = useState<IWorker>(workerOOO)
 
-    const [emp, setEmp] = useState(
-        workers.filter(
-            (item) =>
-                item.OfficialName !== "" &&
-                item.Name !== "Кассир ИП" &&
-                item.Name !== "Кассир ООО" &&
-                item.genTaxPayerIdNum.toString.length > 0
-        )
+    const employeesArray = useMemo(
+        () =>
+            workers.filter(
+                (item) =>
+                    item.Name !== "Кассир ИП" && item.Name !== "Кассир ООО"
+            ),
+        [workers]
     )
-    const handleChange = (event: any) => {
+
+    const handleChange = useCallback((event: any) => {
         const { id, value } = event.target
-        const worker = emp.find((workerItem) => value === workerItem.GUIDString)
+        const worker = employeesArray.find(
+            (workerItem) => value === workerItem.GUIDString
+        )
         if (id === "OOO") {
             if (worker) {
                 setNewOOO({ ...worker, GUIDString: workerOOO.GUIDString })
             } else {
-                setNewOOO(bulkWorker)
+                setNewOOO(workerOOO)
             }
         }
         if (id === "IP") {
             if (worker) {
                 setNewIP({ ...worker, GUIDString: workerIP.GUIDString })
             } else {
-                setNewIP(bulkWorker)
+                setNewIP(workerIP)
             }
         }
-    }
+    }, [])
 
-    const handleSave = async (worker: IWorker, type: string) => {
+    const handleSave = useCallback(async (worker: IWorker, type: string) => {
         const result: {
             data: IWorkerChangeRespose
         } = await axios.post("/api/setworker", { worker })
@@ -89,14 +88,14 @@ const CashierForm: React.FC<InputProps> = ({
                 "error"
             )
         }
-    }
+    }, [])
 
     return (
         <div className={styles.formWrapper}>
             <Cashier
                 title="ИП"
-                emp={emp}
-                data={newIP}
+                employeesArray={employeesArray}
+                selectedWorker={newIP}
                 change={handleChange}
                 worker={workerIP}
                 type="IP"
@@ -106,8 +105,8 @@ const CashierForm: React.FC<InputProps> = ({
             />
             <Cashier
                 title="ООО"
-                emp={emp}
-                data={newOOO}
+                employeesArray={employeesArray}
+                selectedWorker={newOOO}
                 change={handleChange}
                 worker={workerOOO}
                 type="OOO"
