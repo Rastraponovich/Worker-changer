@@ -1,7 +1,7 @@
 import React, { FC, memo, useCallback, useEffect, useState } from "react"
 
 import CashierList from "@/components/CashierForm/CashierList"
-import { IStatus, IWorker } from "@/types/types"
+import { IStatus, IWorker, TButtonType } from "@/types/types"
 import styles from "@/styles/CashiersBlock.module.css"
 import Modal from "../UI/Button/Modal/Modal"
 import { useRouter } from "next/router"
@@ -11,9 +11,7 @@ interface InputProps {
     status: IStatus
 }
 
-type TButtonType = "getinfo" | "get" | "set" | "err"
-
-const CashiersBlock: FC<InputProps> = ({ workers, status, statusMessage }) => {
+const CashiersBlock: FC<InputProps> = ({ workers, status }) => {
     const [modalMessage, setModalMessage] = useState("")
     const [showModal, setShowModal] = useState(false)
     const [buttonType, setButtonType] = useState<TButtonType>("getinfo")
@@ -50,7 +48,9 @@ const CashiersBlock: FC<InputProps> = ({ workers, status, statusMessage }) => {
                         showModal={handleShowModal}
                     />
                 ) : (
-                    <h2 className={styles.statusText}>{statusMessage}</h2>
+                    <h2 className={styles.statusText}>
+                        Опачки.. кажись словил маслину
+                    </h2>
                 )}
                 <div className="bulk" />
             </section>

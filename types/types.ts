@@ -79,6 +79,16 @@ export interface IStatusResponse {
     commandResult?: ICommandResult
 }
 
+export interface IWorkersResponse {
+    workers: IWorker[]
+    commandResult: ICommandResult
+    status?: IStatus
+    error: boolean
+    isAxiosError: boolean
+}
+
 export interface ICasierResponse extends IResponse {
     message: string
 }
+
+export type TButtonType = "getinfo" | "get" | "set" | "err"

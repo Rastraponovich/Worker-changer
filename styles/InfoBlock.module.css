@@ -2,3 +2,9 @@
     margin: 0;
     color: #fff;
 }
+
+@media (min-width: 992px) {
+    .info {
+        color: #000;
+    }
+}

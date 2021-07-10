@@ -4,89 +4,44 @@ import React from "react"
 
 import Layout from "@/components/Layout/Layout"
 import {
-    ICommandResult,
     IStatus,
     IStatusResponse,
     IWorker,
+    IWorkersResponse,
 } from "@/types/types"
 import { useState } from "react"
 import { useEffect } from "react"
 import InfoBlock from "@/components/InfoBlock/InfoBlock"
 import CashiersBlock from "@/components/CashiersBlock/CashiersBlock"
-import Modal from "@/components/UI/Button/Modal/Modal"
 
 interface InputProps {
     status: IStatus
     workers: IWorker[]
 }
 
-interface IWorkersResponse {
-    workers: IWorker[]
-    commandResult: ICommandResult
-    status?: IStatus
-    error: boolean
-    isAxiosError: boolean
-}
-
-const StartPage: NextPage<InputProps> = ({ status }) => {
-    const [loading, setLoading] = useState(true)
-    const [workers, setWorkers] = useState<IWorker[]>([])
-    const [statusMessage, setStatusMessage] = useState("Идет загрузка...")
-
-    const getWorkers = async () => {
-        const request: AxiosResponse<IWorkersResponse> = await axios.get(
-            "/api/workers"
-        )
-        setWorkers(request.data.workers)
-    }
-
-    useEffect(() => {
-        if (workers.length > 0) {
-            setLoading(false)
-        }
-        return setStatusMessage("Сотрудники загружены")
-    }, [workers])
-
-    useEffect(() => {
-        if (status.Status) {
-            setTimeout(() => {
-                getWorkers()
-            }, 3000)
-        }
-        return setStatusMessage("Попытка загрузить сотрудников")
-    }, [status.Status])
-
-    useEffect(() => {
-        setTimeout(() => {
-            setStatusMessage("")
-        }, 3000)
-    }, [loading])
-
-    const handleShowModal = () => {}
-
+const StartPage: NextPage<InputProps> = ({ status, workers }) => {
     return (
         <Layout status={status}>
-            <InfoBlock loading={loading} />
-            <CashiersBlock
-                workers={workers}
-                status={status}
-                statusMessage={statusMessage}
-            />
+            <InfoBlock />
+            <CashiersBlock workers={workers} status={status} />
         </Layout>
     )
 }
 export default StartPage
 
 export const getServerSideProps: GetServerSideProps = async () => {
-    const request: AxiosResponse<IStatusResponse> = await axios.get(
+    const statusRequest: AxiosResponse<IStatusResponse> = await axios.get(
         "http://localhost:3000/api/getStatus"
     )
+    const { error, queryResult } = statusRequest.data
 
-    if (!request.data.error) {
+    if (!error) {
+        const workersRequest: AxiosResponse<IWorkersResponse> = await axios.get(
+            "http://localhost:3000/api/workers"
+        )
+        const { workers } = workersRequest.data
         return {
-            props: {
-                status: request.data.queryResult,
-            },
+            props: { workers, status: queryResult },
         }
     } else {
         return {
