@@ -13,7 +13,6 @@ interface InputProps {
     type: string
     onSave: Function
     showModal: Function
-    serverState: boolean
 }
 
 const CashierCard: FC<InputProps> = (props) => {
@@ -26,7 +25,6 @@ const CashierCard: FC<InputProps> = (props) => {
         type,
         onSave,
         showModal,
-        serverState,
     } = props
     const handleSave = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
@@ -43,6 +41,12 @@ const CashierCard: FC<InputProps> = (props) => {
         }
     }, [selectedWorker])
 
+    useEffect(() => {
+        if (selectedWorker.Code == null) {
+            setDiff(false)
+        }
+    }, [selectedWorker])
+
     const handleGetInfo = async (
         event: React.MouseEvent<HTMLButtonElement>
     ) => {
@@ -54,7 +58,7 @@ const CashierCard: FC<InputProps> = (props) => {
             result.data.RK7Reference.Items[0].Item[0].OfficialName
         const inn = result.data.RK7Reference.Items[0].Item[0].genTaxPayerIdNum
         const text = officialName + " " + inn
-        showModal(text, "success")
+        showModal(text, "getinfo")
     }
 
     return (
@@ -81,7 +85,7 @@ const CashierCard: FC<InputProps> = (props) => {
                 className={styles.input}
             >
                 <option
-                    value={worker?.GUIDString}
+                    value={worker.GUIDString}
                     className={styles.currentOption}
                 >
                     {worker.OfficialName} : {worker.genTaxPayerIdNum}
@@ -97,7 +101,6 @@ const CashierCard: FC<InputProps> = (props) => {
                               <option
                                   key={empItem.GUIDString}
                                   value={empItem.GUIDString}
-                                  //   className={styles.option}
                               >
                                   {empItem.OfficialName} :{" "}
                                   {empItem.genTaxPayerIdNum}

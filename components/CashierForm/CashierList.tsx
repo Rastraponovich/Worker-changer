@@ -5,11 +5,10 @@ import axios from "axios"
 import { IWorker, IWorkerChangeRespose } from "@/types/types"
 
 import Cashier from "../CashierCard/CashierCard"
-import styles from "@/styles/Home.module.css"
+import styles from "@/styles/CashierList.module.css"
 
 interface InputProps {
     workers: IWorker[]
-    serverState: boolean
     showModal: Function
 }
 
@@ -23,7 +22,7 @@ const bulkWorker: IWorker = {
     GUIDString: "",
 }
 
-const CashierList: FC<InputProps> = ({ workers, showModal, serverState }) => {
+const CashierList: FC<InputProps> = ({ workers, showModal }) => {
     const workerOOO = useMemo(
         () => workers.find((item) => item.Name === "Кассир ООО"),
         [workers]
@@ -72,10 +71,7 @@ const CashierList: FC<InputProps> = ({ workers, showModal, serverState }) => {
         } = await axios.post("/api/setworker", { worker })
 
         if (!result.data.error) {
-            showModal(
-                `Кассир ${type} изменен. Перезагрузите страницу`,
-                "refresh"
-            )
+            showModal(`Кассир ${type} изменен. Перезагрузите страницу`, "set")
             if (type === "OOO") {
                 setNewOOO(bulkWorker)
             }
@@ -85,7 +81,7 @@ const CashierList: FC<InputProps> = ({ workers, showModal, serverState }) => {
         } else {
             showModal(
                 `Произошла ошибка! Кассир ${type} неизменен. Перезагрузите страницу`,
-                "error"
+                "set"
             )
         }
     }, [])
@@ -101,7 +97,6 @@ const CashierList: FC<InputProps> = ({ workers, showModal, serverState }) => {
                 type="IP"
                 onSave={handleSave}
                 showModal={showModal}
-                serverState={serverState}
             />
             <Cashier
                 title="ООО"
@@ -112,7 +107,6 @@ const CashierList: FC<InputProps> = ({ workers, showModal, serverState }) => {
                 type="OOO"
                 onSave={handleSave}
                 showModal={showModal}
-                serverState={serverState}
             />
         </div>
     )

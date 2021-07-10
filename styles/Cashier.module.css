@@ -71,6 +71,8 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+    font-family: Montserrat;
+    font-weight: 400;
 }
 
 .input:hover {

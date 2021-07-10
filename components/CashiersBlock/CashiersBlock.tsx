@@ -1,45 +1,66 @@
-import React, { FC, memo, useEffect } from "react"
+import React, { FC, memo, useCallback, useEffect, useState } from "react"
 
 import CashierList from "@/components/CashierForm/CashierList"
-import NoData from "@/components/NoData/NoData"
-import { IWorker } from "@/types/types"
+import { IStatus, IWorker } from "@/types/types"
+import styles from "@/styles/CashiersBlock.module.css"
+import Modal from "../UI/Button/Modal/Modal"
 import { useRouter } from "next/router"
-
 interface InputProps {
-    state: boolean
     workers?: IWorker[]
-    showModal?: (text: string) => void
-    styles: {
-        readonly [key: string]: string
-    }
+    statusMessage?: string
+    status: IStatus
 }
 
-const CashiersBlock: FC<InputProps> = ({
-    state,
-    workers,
-    showModal,
-    styles,
-}) => {
-    // const { push } = useRouter()
-    // useEffect(() => {
-    //     if (!state) {
-    //         push("/404")
-    //     }
-    // }, [state])
+type TButtonType = "getinfo" | "get" | "set" | "err"
+
+const CashiersBlock: FC<InputProps> = ({ workers, status, statusMessage }) => {
+    const [modalMessage, setModalMessage] = useState("")
+    const [showModal, setShowModal] = useState(false)
+    const [buttonType, setButtonType] = useState<TButtonType>("getinfo")
+
+    const { reload } = useRouter()
+    const handleClick = () => {
+        setModalMessage("")
+        setShowModal(false)
+        if (buttonType === "set") {
+            reload()
+        }
+    }
+
+    const handleOpenModal = useCallback(() => {
+        setModalMessage("")
+        setShowModal(!showModal)
+    }, [showModal])
+
+    const handleShowModal = useCallback(
+        (text: string, type: TButtonType = "getinfo") => {
+            setModalMessage(text)
+            setButtonType(type)
+            setShowModal(!showModal)
+        },
+        [showModal]
+    )
 
     return (
-        <section className={styles.section}>
-            {state ? (
-                <CashierList
-                    workers={workers}
-                    showModal={showModal}
-                    serverState={state}
-                />
-            ) : (
-                <NoData />
-            )}
-            <div className="bulk" />
-        </section>
+        <>
+            <section className={styles.section}>
+                {workers.length > 0 ? (
+                    <CashierList
+                        workers={workers}
+                        showModal={handleShowModal}
+                    />
+                ) : (
+                    <h2 className={styles.statusText}>{statusMessage}</h2>
+                )}
+                <div className="bulk" />
+            </section>
+            <Modal show={showModal} onClose={handleOpenModal}>
+                <p>{modalMessage}</p>
+                <button className={styles.modalButton} onClick={handleClick}>
+                    Продолжить
+                </button>
+            </Modal>
+        </>
     )
 }
 

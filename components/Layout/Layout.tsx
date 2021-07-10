@@ -7,18 +7,17 @@ import Footer from "@/components/Footer/Footer"
 import { IStatus } from "@/types/types"
 
 interface InputProps {
-    serverState?: boolean
     children: any
     status?: IStatus
 }
-const Layout: FC<InputProps> = ({ serverState, children, status }) => {
+const Layout: FC<InputProps> = ({ children, status }) => {
     return (
         <>
             <Head>
                 <title>WorkerChanger</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Header serverState={serverState} />
+            <Header status={status} />
             <main className={styles.main}>{children}</main>
             <div className="bulk"></div>
             <Footer status={status} />

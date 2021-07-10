@@ -7,13 +7,13 @@ import React, {
     useState,
 } from "react"
 import styles from "@/styles/Header.module.css"
-import HeaderStatusIndicator from "@/components/Header/HeaderStatusIndicator"
 import ThingsContext, { IContextTheme } from "../App/ThingsContext"
+import { IStatus } from "@/types/types"
 interface InputProps {
-    serverState: boolean
+    status: IStatus
 }
 
-const Header: FC<InputProps> = ({ serverState }) => {
+const Header: FC<InputProps> = ({ status }) => {
     const context = useContext(ThingsContext)
     return (
         <header style={context.theme.header}>
@@ -21,7 +21,7 @@ const Header: FC<InputProps> = ({ serverState }) => {
                 Настройка кассиров
             </a>
             <div className="bulk"></div>
-            <HeaderStatusIndicator state={serverState} styles={styles} />
+            <span>Статус сервера: {status.Status}</span>
         </header>
     )
 }
