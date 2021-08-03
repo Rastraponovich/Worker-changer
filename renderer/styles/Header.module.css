@@ -1,0 +1,41 @@
+.header {
+    display: flex;
+    padding: 1rem 2rem;
+    background-color: #293048;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    color: #fff;
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.circleActive {
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    background-color: green;
+}
+.circleInActive {
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    background-color: red;
+}
+.statusBlock {
+    display: flex;
+    align-items: center;
+    color: #fff;
+}
+.statusBlock span:not(:last-child) {
+    margin: 0 0.5rem 0 0;
+}
+
+@media (max-width: 576px) {
+    .circleActive,
+    .circleInActive {
+        display: none;
+    }
+}

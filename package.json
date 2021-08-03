@@ -1,12 +1,17 @@
 {
     "name": "front",
-    "version": "0.2.3",
+    "version": "0.2.4",
+    "main": "main/index.js",
+    "productName": "ElectronTypescriptNext",
     "scripts": {
-        "dev": "next dev",
-        "build": "next build",
-        "test": "node server.js",
-        "start": "next start",
-        "static": "next build && next export"
+        "clean": "rimraf dist main renderer/out renderer/.next",
+        "dev": "npm run build-electron && electron .",
+        "build-renderer": "next build renderer && next export renderer",
+        "build-electron": "tsc -p electron-src",
+        "build": "npm run build-renderer && npm run build-electron",
+        "pack-app": "npm run build && electron-builder --dir",
+        "dist": "npm run build && electron-builder",
+        "type-check": "tsc"
     },
     "dependencies": {
         "@emotion/core": "^11.0.0",
@@ -14,7 +19,10 @@
         "@emotion/styled": "^11.3.0",
         "axios": "^0.21.1",
         "csstype": "^3.0.8",
+        "electron-is-dev": "^1.1.0",
+        "electron-next": "^3.1.5",
         "fast-xml-parser": "^3.19.0",
+        "fs": "^0.0.1-security",
         "he": "^1.2.0",
         "https": "^1.0.0",
         "next": "^11.0.1",
@@ -29,6 +37,16 @@
         "@types/he": "^1.1.1",
         "@types/react": "^17.0.3",
         "@types/uuid": "^8.3.1",
+        "electron": "^13.1.7",
+        "electron-builder": "^22.9.1",
+        "rimraf": "^3.0.0",
         "typescript": "^4.3.2"
+    },
+    "build": {
+        "asar": true,
+        "files": [
+            "main",
+            "renderer/out"
+        ]
     }
 }
