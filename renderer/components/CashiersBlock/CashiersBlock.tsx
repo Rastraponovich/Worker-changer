@@ -1,52 +1,30 @@
-import React, { FC, memo, useCallback, useEffect, useState } from "react"
+import React, { FC, memo, useCallback } from "react"
 
-import CashierList from "@/components/CashierForm/CashierList"
-import { IStatus, IWorker, TButtonType } from "@/types/types"
+import CashierList from "@/components/CashierList/CashierList"
 import styles from "@/styles/CashiersBlock.module.css"
 import Modal from "../UI/Button/Modal/Modal"
-import { useRouter } from "next/router"
-interface InputProps {
-    workers?: IWorker[]
-    statusMessage?: string
-    status: IStatus
-}
+import { useTypeSelector } from "@/hooks/useTypeSelector"
+import { useStore } from "react-redux"
+import { NextThunkDispatch } from "store"
+import { closeModalAction } from "store/actions/workersActions"
+interface InputProps {}
 
-const CashiersBlock: FC<InputProps> = ({ workers, status }) => {
-    const [modalMessage, setModalMessage] = useState("")
-    const [showModal, setShowModal] = useState(false)
-    const [buttonType, setButtonType] = useState<TButtonType>("getinfo")
-
-    const { reload } = useRouter()
-    const handleClick = () => {
-        setModalMessage("")
-        setShowModal(false)
-        if (buttonType === "set") {
-            reload()
-        }
-    }
-
-    const handleOpenModal = useCallback(() => {
-        setModalMessage("")
-        setShowModal(!showModal)
-    }, [showModal])
-
-    const handleShowModal = useCallback(
-        (text: string, type: TButtonType = "getinfo") => {
-            setModalMessage(text)
-            setButtonType(type)
-            setShowModal(!showModal)
-        },
-        [showModal]
+const CashiersBlock: FC<InputProps> = () => {
+    const { isOpenModal, workerInfo, workers } = useTypeSelector(
+        (store) => store.workersStore
     )
+
+    const dispatch = useStore().dispatch as NextThunkDispatch
+
+    const handleOpenModal = useCallback(async () => {
+        await dispatch(await closeModalAction())
+    }, [isOpenModal])
 
     return (
         <>
             <section className={styles.section}>
                 {workers.length > 0 ? (
-                    <CashierList
-                        workers={workers}
-                        showModal={handleShowModal}
-                    />
+                    <CashierList />
                 ) : (
                     <h2 className={styles.statusText}>
                         Опачки.. кажись словил маслину
@@ -54,9 +32,12 @@ const CashiersBlock: FC<InputProps> = ({ workers, status }) => {
                 )}
                 <div className="bulk" />
             </section>
-            <Modal show={showModal} onClose={handleOpenModal}>
-                <p>{modalMessage}</p>
-                <button className={styles.modalButton} onClick={handleClick}>
+            <Modal autoClose={2000}>
+                <p>{workerInfo.OfficialName}</p>
+                <button
+                    className={styles.modalButton}
+                    onClick={handleOpenModal}
+                >
                     Продолжить
                 </button>
             </Modal>

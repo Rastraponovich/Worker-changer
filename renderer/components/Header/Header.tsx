@@ -8,17 +8,18 @@ import React, {
 } from "react"
 import styles from "@/styles/Header.module.css"
 import ThingsContext, { IContextTheme } from "../App/ThingsContext"
-import { IStatus } from "@/types/types"
+import { IStatus } from "interfaces/types"
 interface InputProps {
     status: IStatus
+    title?: string
 }
 
-const Header: FC<InputProps> = ({ status }) => {
+const Header: FC<InputProps> = ({ status, title }) => {
     const context = useContext(ThingsContext)
     return (
         <header style={context.theme.header}>
             <a href="/" className={styles.title}>
-                Настройка кассиров
+                {title ? title : "Настройка кассиров"}
             </a>
             <div className="bulk"></div>
             <span>Статус сервера: {status.Status}</span>

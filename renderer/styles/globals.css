@@ -57,26 +57,11 @@ button {
         border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-@media (min-width: 1px) {
-    body {
-        background-color: #293048;
-    }
+body {
+    background-color: #293048;
+    color: #fff;
 }
 
-@media (min-width: 576px) {
-}
-
-@media (min-width: 768px) {
-}
-
-@media (min-width: 992px) {
-    body {
-        background-color: #fff;
-    }
-}
-
-@media (min-width: 1200px) {
-}
-
-@media (max-width: 600px) {
+.title {
+    color: #fff;
 }

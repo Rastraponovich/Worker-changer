@@ -1,7 +1,8 @@
 import * as parser from "fast-xml-parser"
 import he from "he"
-import { ParserInputProps } from "@/types/types"
-
+import { ParserInputProps } from "interfaces/types"
+/* eslint-disable @typescript-eslint/no-namespace */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const arrayObjOptions = {
     attributeNamePrefix: "",
     textNodeName: "#text",
@@ -15,13 +16,13 @@ const arrayObjOptions = {
     cdataPositionChar: "\\c",
     parseTrueNumberOnly: false,
     arrayMode: true,
-    attrValueProcessor: (val: string, attrName: string) =>
+    attrValueProcessor: (val: string) =>
         he.decode(val, { isAttributeValue: true }), //default is a=>a
-    tagValueProcessor: (val: string, tagName: string) => he.decode(val), //default is a=>a
+    tagValueProcessor: (val: string) => he.decode(val), //default is a=>a
     stopNodes: ["parse-me-as-string"],
 }
 
-export const useParser: ParserInputProps = (xmlData): any => {
+export const useParser: ParserInputProps = (xmlData: string): any => {
     let jsonObj = {}
 
     if (parser.validate(xmlData) === true) {

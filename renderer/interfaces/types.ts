@@ -87,6 +87,13 @@ export interface IWorkersResponse {
     isAxiosError: boolean
 }
 
+export interface IWorkerGetInfoResult {
+    queryResult: IQueryResult
+    worker: IWorker
+    error?: boolean
+    message?: boolean
+}
+
 export interface ICasierResponse extends IResponse {
     message: string
 }

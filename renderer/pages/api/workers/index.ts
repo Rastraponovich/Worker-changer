@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { useParser } from "@/hooks/usePareser"
 import { sendData } from "@/hooks/useGetData"
 import { getEmployees, getSystemInfo } from "@/schemas/schema"
-import { IEmployeesData, IWorker } from "@/types/types"
+import { IEmployeesData, IWorker } from "interfaces/types"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const employeesSchema = getEmployees()

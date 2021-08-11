@@ -1,7 +1,7 @@
-import axios, { AxiosError, AxiosInterceptorManager } from "axios"
+import axios from "axios"
 import { Agent } from "https"
 
-import { IAuth } from "@/types/types"
+import { IAuth } from "interfaces/types"
 
 const credentials: IAuth = {
     username: process.env.RK7_LOGIN,
@@ -30,7 +30,7 @@ export const sendData = async (xmlQuery: string): Promise<string | any> => {
             code: null,
         }
     } catch (error) {
-        const { isAxiosError, code, request } = error
+        const { isAxiosError, code } = error
         return {
             error: true,
             isAxiosError,

@@ -1,7 +1,7 @@
 import React, { FC, memo, useContext, useEffect, useState } from "react"
-import { IStatus } from "@/types/types"
+import { IStatus } from "interfaces/types"
 import ThingsContext from "../App/ThingsContext"
-
+import styles from "./footer.module.css"
 interface InputProps {
     status?: IStatus
 }
@@ -12,17 +12,20 @@ const Footer: FC<InputProps> = ({ status }) => {
 
     useEffect(() => {
         setInterval(() => {
-            const date = new Date()
-            setTime(date.toLocaleString())
+            setTime(new Date().toLocaleString())
         }, 1000)
     }, [status])
 
     return (
         <footer style={context.theme.footer}>
-            <span>Версия программы: 0.2.3</span>
-            <span>Версия сервера: {status.ServerVersion}</span>
-            <span>Имя сервера: {status.NetName}</span>
-            <span>{time}</span>
+            <span className={styles.footerText}>Версия программы: 0.2.3</span>
+            <span className={styles.footerText}>
+                Версия сервера: {status.ServerVersion}
+            </span>
+            <span className={styles.footerText}>
+                Имя сервера: {status.NetName}
+            </span>
+            <span className={styles.footerText}>{time}</span>
         </footer>
     )
 }

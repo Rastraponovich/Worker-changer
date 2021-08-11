@@ -2,10 +2,8 @@ import { NextPage } from "next"
 import React from "react"
 import Head from "next/head"
 import styles from "@/styles/401.module.css"
-import { useRouter } from "next/router"
 
-const Page404: NextPage = () => {
-    const { push } = useRouter()
+const Page401: NextPage = () => {
     return (
         <div className={styles.container}>
             <video
@@ -24,11 +22,9 @@ const Page404: NextPage = () => {
                 <h1 className={styles.title}>Ошибка 401</h1>
                 <h2 className={styles.subtitle}>Пользователь не авторизован</h2>
                 <p className={styles.text}>Свяжитесь +79182086821</p>
-
-                {/* <Button onClick={() => push("/")} text="Назад" /> */}
             </div>
         </div>
     )
 }
 
-export default Page404
+export default Page401

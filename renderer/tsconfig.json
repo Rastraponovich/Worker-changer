@@ -7,7 +7,7 @@
             "@/components/*": ["components/*"],
             "@/hooks/*": ["hooks/*"],
             "@/styles/*": ["styles/*"],
-            "@/types/*": ["types/*"],
+            "@/interfaces/*": ["interfaces/*"],
             "@/schemas/*": ["schemas/*"]
         },
         "allowJs": true,

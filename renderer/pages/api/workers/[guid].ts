@@ -20,17 +20,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (!error) {
         const result = useParser(data)
         const { CommandResult, ...queryResult } = result.RK7QueryResult[0]
-        const {
-            SourceCommand,
-            RK7Reference,
-            ...commandResult
-        } = CommandResult[0]
+        const { RK7Reference } = CommandResult[0]
 
         return res.status(200).json({
             queryResult,
-            commandResult,
-            RK7Reference: RK7Reference[0],
-            sourceCommand: SourceCommand[0],
+            worker: RK7Reference[0].Items[0].Item[0],
         })
     } else {
         return res.status(200).json({

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { IAuth, IResponse, IWorker } from "@/types/types"
+import { IAuth, IResponse, IWorker } from "interfaces/types"
 import { sendData } from "@/hooks/useGetData"
 import { useParser } from "@/hooks/usePareser"
 import { setWorker } from "schemas/schema"
@@ -12,7 +12,6 @@ const handleSave = async (worker: IWorker) => {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const { worker } = req.body
-
     const schema = setWorker(worker)
 
     const request: IResponse = await sendData(schema)

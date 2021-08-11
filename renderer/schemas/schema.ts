@@ -1,4 +1,4 @@
-import { IWorker } from "@/types/types"
+import { IWorker } from "../interfaces/types"
 
 import { v4 } from "uuid"
 

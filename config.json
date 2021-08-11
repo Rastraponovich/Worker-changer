@@ -1,0 +1,9 @@
+{
+    "name": "test",
+    "rk7port": 86,
+    "rk7_ref": "10.20.4.2",
+    "rk7_url": "https://10.20.4.2:86/rk7api/v0/xmlinterface.xml",
+    "rk7_login": "Wilde",
+    "rk7_password": "1024",
+    "mainParentIdent": 100007
+}

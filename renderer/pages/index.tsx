@@ -1,55 +1,41 @@
-import axios, { AxiosResponse } from "axios"
-import { GetServerSideProps, NextPage } from "next"
-import React from "react"
-
 import Layout from "@/components/Layout/Layout"
-import {
-    IStatus,
-    IStatusResponse,
-    IWorker,
-    IWorkersResponse,
-} from "@/types/types"
-import { useState } from "react"
+import { useRouter } from "next/router"
+import React, { memo, FC } from "react"
 import { useEffect } from "react"
-import InfoBlock from "@/components/InfoBlock/InfoBlock"
-import CashiersBlock from "@/components/CashiersBlock/CashiersBlock"
+import { connect } from "react-redux"
+import { NextThunkDispatch } from "store"
+import { startInitAction } from "store/actions/mainActions"
+import { RootState } from "store/reducers"
 
-interface InputProps {
-    status: IStatus
-    workers: IWorker[]
+interface InputProps extends RootState {
+    dispatch: NextThunkDispatch
 }
 
-const StartPage: NextPage<InputProps> = ({ status, workers }) => {
+const MainPage: FC<InputProps> = ({ dispatch, mainState }) => {
+    const { init, hasConfig } = mainState
+
+    const { push } = useRouter()
+
+    const startInit = async () => {
+        await dispatch(await startInitAction())
+    }
+
+    // useEffect(() => {
+    //     if (init) {
+    //         push("/workers")
+    //     } else {
+    //         setTimeout(() => {
+    //             startInit()
+    //         }, 3000)
+    //     }
+    // }, [init])
+
     return (
-        <Layout status={status}>
-            <InfoBlock />
-            <CashiersBlock workers={workers} status={status} />
+        <Layout title="Главная страница">
+            <h2 className="title">Инициализация приложения</h2>
+            <h3>{hasConfig ? null : "Загрузка конфигурации"}</h3>
         </Layout>
     )
 }
-export default StartPage
 
-export const getServerSideProps: GetServerSideProps = async () => {
-    const statusRequest: AxiosResponse<IStatusResponse> = await axios.get(
-        "http://localhost:8000/api/getStatus"
-    )
-    const { error, queryResult } = statusRequest.data
-
-    if (!error) {
-        const workersRequest: AxiosResponse<IWorkersResponse> = await axios.get(
-            "http://localhost:8000/api/workers"
-        )
-        const { workers } = workersRequest.data
-        return {
-            props: { workers, status: queryResult },
-        }
-    } else {
-        return {
-            props: {},
-            redirect: {
-                destination: "404",
-                basePath: true,
-            },
-        }
-    }
-}
+export default connect((state: RootState) => state)(MainPage)

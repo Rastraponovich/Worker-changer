@@ -6,6 +6,7 @@ const footer = {
         padding: "1rem",
         display: "flex",
         justifyContent: "space-between",
+        flexWrap: "wrap",
         color: " #000",
     },
     dark: {
@@ -13,7 +14,10 @@ const footer = {
         padding: "1rem",
         display: "flex",
         justifyContent: "space-between",
+        flexWrap: "wrap",
         color: " #fff",
+        boxShadow:
+            "0 2px 12px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.5)",
     },
 }
 const header = {
@@ -24,14 +28,19 @@ const header = {
         color: "#000",
         justifyContent: "space-between",
         alignItems: "center",
+        boxShadow:
+            "0 2px 12px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24)",
     },
     dark: {
         display: "flex",
+
         color: "#fff",
         padding: "1rem 2rem",
         backgroundColor: "#293048",
         justifyContent: "space-between",
         alignItems: "center",
+        boxShadow:
+            "0 2px 12px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24)",
     },
 }
 const body = {
