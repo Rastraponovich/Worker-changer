@@ -1,61 +1,37 @@
-import { NextPage } from "next"
-import React, { useEffect } from "react"
-import { connect } from "react-redux"
-
-import { RootState } from "store/reducers"
-import { NextThunkDispatch } from "store"
-
-import { getAllWorkersAction } from "store/actions/workersActions"
-import { getStatusAction } from "store/actions/statusActions"
+import { GetStaticProps, NextPage } from "next"
+import React, { memo } from "react"
 
 import Layout from "@/components/Layout/Layout"
 import InfoBlock from "@/components/InfoBlock/InfoBlock"
-import CashiersBlock from "@/components/CashiersBlock/CashiersBlock"
-import { useRouter } from "next/router"
+import { useEvent, useStore } from "effector-react/scope"
+import { $loadingWorkers, getWorkers } from "features/workers"
+import { allSettled, fork, serialize } from "effector"
+import CashierList from "@/components/CashierList/CashierList"
 
-interface InputProps extends RootState {
-    dispatch: NextThunkDispatch
-}
+interface WorkersPageProps {}
 
-const StartPage: NextPage<InputProps> = ({
-    workersStore,
-    statusStore,
-    dispatch,
-}) => {
-    const { workers, reload, loading } = workersStore
-    const { status, error } = statusStore
-    const { push } = useRouter()
+const WorkersPage: NextPage<WorkersPageProps> = () => {
+    const loading = useStore($loadingWorkers)
 
-    const initPage = async () => {
-        await dispatch(await getAllWorkersAction())
-        await dispatch(await getStatusAction())
-    }
-
-    useEffect(() => {
-        initPage()
-    }, [])
-
-    useEffect(() => {
-        if (error) {
-            push("/401")
-        }
-    }, [error])
-
-    useEffect(() => {
-        if (reload) initPage()
-    }, [reload])
+    const handleGetStatus = useEvent(getWorkers)
 
     return (
         <Layout title="Настройка кассиров">
-            {loading ? (
-                <h2>Идет загрузка</h2>
-            ) : (
-                <>
-                    <InfoBlock />
-                    <CashiersBlock />
-                </>
-            )}
+            <button onClick={handleGetStatus}>refresh</button>
+            <InfoBlock />
+            {loading && <h2 className="my-4">Идет загрузка</h2>}
+            {!loading && <CashierList />}
         </Layout>
     )
 }
-export default connect((state: RootState) => state)(StartPage)
+
+export default memo(WorkersPage)
+
+export const getStaticProps: GetStaticProps = async () => {
+    const scope = fork()
+
+    await allSettled(getWorkers, { scope })
+
+    const serialized = serialize(scope)
+    return { props: { initialState: serialized } }
+}

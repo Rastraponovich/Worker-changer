@@ -1,14 +1,14 @@
 import { sendData } from "@/hooks/useGetData"
 import { useParser } from "@/hooks/usePareser"
 import { createWorker, getEmployeesByName } from "@/schemas/schema"
-
-export const checkCashier = async (name: string) => {
+/* eslint-disable */
+export const useCheckCashier = async (name: string) => {
     const parentIdent = process.env.MAINPARENTIDENT
 
     const request = await sendData(getEmployeesByName(name, parentIdent))
 
-    const parseResponse = useParser(request.data).RK7QueryResult[0]
-        .CommandResult[0].RK7Reference[0]
+    const parseResponse = useParser(request.data).RK7QueryResult.CommandResult
+        .RK7Reference
 
     if (parseResponse.Items.length <= 0) {
         const newCashierSchema = createWorker(name, parentIdent)
@@ -32,3 +32,4 @@ export const checkCashier = async (name: string) => {
         message: `${name} существует`,
     }
 }
+/* eslint-enable */

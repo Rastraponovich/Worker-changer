@@ -1,0 +1,30 @@
+{
+    "extends": [
+        "next",
+        "plugin:@next/next/recommended",
+        // "prettier",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:tailwindcss/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint", "effector", "tailwindcss"],
+    "rules": {
+        "tailwindcss/classnames-order": "off",
+        "tailwindcss/no-custom-classname": "off",
+        "tailwindcss/no-contradicting-classname": "off",
+        "@next/next/no-document-import-in-page": "off",
+        "no-var": "off",
+        "import/no-anonymous-default-export": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/no-empty-interface": "off",
+        "react/display-name": "off",
+        "react-hooks/exhaustive-deps": "off",
+        "jsx-a11y/alt-text": "off",
+        "no-undef": "off"
+    },
+    "root": true
+}

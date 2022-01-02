@@ -1,10 +1,6 @@
-import React, { FC, ReactNode, useEffect, useState } from "react"
+import React, { FC, ReactNode, useEffect } from "react"
 import styles from "@/styles/Modal.module.css"
 import { memo } from "react"
-import { useTypeSelector } from "@/hooks/useTypeSelector"
-import { useStore } from "react-redux"
-import { NextThunkDispatch } from "store"
-import { closeModalAction } from "store/actions/workersActions"
 
 interface InputProps {
     autoClose?: number
@@ -12,12 +8,11 @@ interface InputProps {
 }
 
 const Modal: FC<InputProps> = ({ children, autoClose }) => {
-    const { isOpenModal } = useTypeSelector((store) => store.workersStore)
-
-    const dispatch = useStore().dispatch as NextThunkDispatch
+    // const { isOpenModal } = useTypeSelector((store) => store.workersStore)
+    const isOpenModal = false
 
     const handleClose = async () => {
-        await dispatch(await closeModalAction())
+        // await dispatch(await closeModalAction())
     }
 
     useEffect(() => {

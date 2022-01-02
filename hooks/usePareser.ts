@@ -1,9 +1,9 @@
-import * as parser from "fast-xml-parser"
+import { parse, validate, X2jOptionsOptional } from "fast-xml-parser"
 import he from "he"
 import { ParserInputProps } from "interfaces/types"
 /* eslint-disable @typescript-eslint/no-namespace */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const arrayObjOptions = {
+const arrayObjOptions: X2jOptionsOptional = {
     attributeNamePrefix: "",
     textNodeName: "#text",
     ignoreAttributes: false,
@@ -15,7 +15,7 @@ const arrayObjOptions = {
     cdataTagName: "__cdata",
     cdataPositionChar: "\\c",
     parseTrueNumberOnly: false,
-    arrayMode: true,
+    arrayMode: (tagName, parentTagName) => parseArray(tagName, parentTagName),
     attrValueProcessor: (val: string) =>
         he.decode(val, { isAttributeValue: true }), //default is a=>a
     tagValueProcessor: (val: string) => he.decode(val), //default is a=>a
@@ -25,8 +25,30 @@ const arrayObjOptions = {
 export const useParser: ParserInputProps = (xmlData: string): any => {
     let jsonObj = {}
 
-    if (parser.validate(xmlData) === true) {
-        jsonObj = parser.parse(xmlData, arrayObjOptions)
+    if (validate(xmlData) === true) {
+        jsonObj = parse(xmlData, arrayObjOptions)
     }
     return jsonObj
+}
+
+const tagNameRules = {
+    RK7QueryResult: false,
+    SystemInfo: false,
+    SourceCommand: false,
+    RK7Reference: false,
+}
+
+const parentTagNameRules = {
+    RK7QueryResult: false,
+    SourceCommand: false,
+    RK7Reference: false,
+}
+
+export const parseArray = (tagName: string, parentTagName: string) => {
+    if (tagName in tagNameRules) return tagNameRules[tagName]
+
+    if (parentTagName in parentTagNameRules)
+        return parentTagNameRules[parentTagName]
+
+    return true
 }

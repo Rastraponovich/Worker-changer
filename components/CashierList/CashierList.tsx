@@ -1,89 +1,54 @@
-import React, { FC, memo, useCallback, useMemo, useState } from "react"
+import React, { FC, memo, useCallback } from "react"
 
 import { IWorker } from "interfaces/types"
 
-import styles from "@/styles/CashierList.module.css"
-import { useStore } from "react-redux"
-import { NextThunkDispatch } from "store"
-import { useTypeSelector } from "@/hooks/useTypeSelector"
-import { saveWorkerAction } from "store/actions/workersActions"
-import Card from "../UI/Card/Card"
+import Cashier from "../Cashier/Cashier"
+import {
+    $currentIPWorker,
+    $currentOOOWorker,
+    $newIPWorker,
+    $newOOOWorker,
+    saveIPWorker,
+    saveOOOWorker,
+    selectNewIPWorker,
+    selectNewOOOWorker,
+} from "features/workers"
 
-interface InputProps {}
+interface CashierListProps {}
 
-const CashierList: FC<InputProps> = () => {
-    const { workers, currentIPWorker, currentOOOWorker } = useTypeSelector(
-        (store) => store.workersStore
-    )
-    const dispatch = useStore().dispatch as NextThunkDispatch
-
-    const workerOOO = useMemo(() => currentOOOWorker, [currentOOOWorker])
-    const workerIP = useMemo(() => currentIPWorker, [currentIPWorker])
-
-    const [newIP, setNewIP] = useState<IWorker>(workerIP)
-    const [newOOO, setNewOOO] = useState<IWorker>(workerOOO)
-
-    const employeesArray = useMemo(
-        () =>
-            workers.filter(
-                (item) =>
-                    item.Name !== "Кассир ИП" && item.Name !== "Кассир ООО"
-            ),
-        [workers]
-    )
-
-    const handleChange = useCallback(
-        (event: any) => {
-            const { id, value } = event.target
-            const worker = employeesArray.find(
-                (workerItem) => value === workerItem.GUIDString
-            )
-            if (id === "OOO") {
-                if (worker) {
-                    setNewOOO({ ...worker, GUIDString: workerOOO.GUIDString })
-                } else {
-                    setNewOOO(workerOOO)
-                }
-            }
-            if (id === "IP") {
-                if (worker) {
-                    setNewIP({ ...worker, GUIDString: workerIP.GUIDString })
-                } else {
-                    setNewIP(workerIP)
-                }
-            }
-        },
-        [workerOOO, workerIP]
-    )
-
-    const handleSave = useCallback(
-        async (worker: IWorker) => {
-            await dispatch(await saveWorkerAction(worker))
-        },
-        [currentIPWorker, currentOOOWorker]
-    )
-
+const CashierList: FC<CashierListProps> = () => {
     return (
-        <div className={styles.formWrapper}>
-            <Card
-                title="ИП"
-                employeesArray={employeesArray}
-                selectedWorker={newIP}
-                change={handleChange}
-                worker={workerIP}
-                type="IP"
-                onSave={handleSave}
-            />
-            <Card
-                title="ООО"
-                employeesArray={employeesArray}
-                selectedWorker={newOOO}
-                change={handleChange}
-                worker={workerOOO}
-                type="OOO"
-                onSave={handleSave}
-            />
-        </div>
+        <section className="flex flex-col grow w-full">
+            <div className="flex flex-wrap justify-center">
+                <Cashier
+                    title="ИП"
+                    selectedWorker={$newIPWorker}
+                    change={selectNewIPWorker}
+                    worker={$currentIPWorker}
+                    onSave={saveIPWorker}
+                />
+                <Cashier
+                    title="ООО"
+                    selectedWorker={$newOOOWorker}
+                    change={selectNewOOOWorker}
+                    worker={$currentOOOWorker}
+                    onSave={saveOOOWorker}
+                />
+            </div>
+            <div className="bulk" />
+            {/* <Modal autoClose={2000}>
+                <p>{workerInfo?.OfficialName}</p>
+                <button
+                    className={clsx(
+                        "flex items-center justify-center px-5 py-3 bg-green-700 text-white border-2 rounded border-transparent outline-none hover:bg-white ",
+                        "hover:border-green-700 hover:text-green-700"
+                    )}
+                    onClick={handleOpenModal}
+                >
+                    Продолжить
+                </button>
+            </Modal> */}
+        </section>
     )
 }
 
