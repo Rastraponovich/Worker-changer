@@ -3,26 +3,27 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { useParser } from "@/hooks/usePareser"
 import { sendData } from "@/hooks/useGetData"
 import { getSystemInfo } from "@/schemas/schema"
+import { ParsedSystemInfo } from "@/interfaces/parsedTypes"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-    const result = await sendData(getSystemInfo())
-    if (result.error) {
+    const schema = getSystemInfo()
+
+    const response = await sendData(schema)
+
+    if (response.error) {
         return res.status(200).json({
             error: true,
             message: "Произошла ошибка",
-            status: { Status: "Произошла ошибка" },
-            ...result,
+            Status: "Произошла ошибка",
+            ...response,
         })
     } else {
-        const { CommandResult, ...queryResult } = useParser(
-            result.data
-        ).RK7QueryResult[0]
+        const parsedResponse: ParsedSystemInfo = useParser(response.data)
 
         res.status(200).json({
             error: false,
             message: "",
-            queryResult,
-            commandResult: CommandResult[0],
+            ...parsedResponse.RK7QueryResult,
         })
     }
 }

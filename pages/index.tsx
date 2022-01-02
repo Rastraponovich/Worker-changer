@@ -1,44 +1,51 @@
 import Layout from "@/components/Layout/Layout"
-import Settings from "@/components/Settings/Settings"
-import prisma from "lib/prisma"
-import { NextPage } from "next"
+
+import { allSettled, fork, serialize } from "effector"
+import { useStore } from "effector-react"
+import { useEvent } from "effector-react/scope"
+import { $initalState, getStatus } from "features/initialApp"
+import { $workers, getWorkers } from "features/workers"
+import { GetStaticProps, NextPage } from "next"
 import { useRouter } from "next/router"
 import React, { memo, FC } from "react"
 import { useEffect } from "react"
-import { connect } from "react-redux"
-import { NextThunkDispatch } from "store"
-import { getSettinsAciton, startInitAction } from "store/actions/mainActions"
-import { RootState } from "store/reducers"
 
-interface InputProps extends RootState {
-    dispatch: NextThunkDispatch
-}
+interface MainPageProps {}
 
-const MainPage: NextPage<InputProps> = ({ dispatch, mainState }) => {
-    const { currentSettingsId } = mainState
-
+const MainPage: NextPage<MainPageProps> = () => {
     const { push } = useRouter()
 
-    const getSettings = async () => {
-        await dispatch(await getSettinsAciton())
-    }
+    const initialState = useStore($initalState)
 
     useEffect(() => {
-        if (currentSettingsId === null) {
+        if (initialState) {
             setTimeout(() => {
-                getSettings()
-            }, 10000)
-        } else {
-            push("/workers")
+                push("/workers")
+            }, 3000)
         }
-    }, [currentSettingsId])
+    }, [initialState])
 
+    const workers = useStore($workers)
     return (
         <Layout title="Главная страница">
             <h2 className="title">Инициализация приложения</h2>
-            <h3>Загрузка конфигурации</h3>
+            {!initialState && <h3>Загрузка конфигурации</h3>}
+
+            {initialState && <h3>Работников получено: {workers.length}</h3>}
         </Layout>
     )
 }
 
-export default connect((state: RootState) => state)(MainPage)
+export default memo(MainPage)
+
+export const getStaticProps: GetStaticProps = async () => {
+    const scope = fork()
+
+    await allSettled(getStatus, { scope })
+
+    const serialized = serialize(scope)
+
+    return {
+        props: { initialState: serialized },
+    }
+}

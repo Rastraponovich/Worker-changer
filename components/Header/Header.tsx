@@ -1,28 +1,25 @@
-import React, {
-    FC,
-    memo,
-    useContext,
-    useEffect,
-    useMemo,
-    useState,
-} from "react"
-import styles from "@/styles/Header.module.css"
-import ThingsContext, { IContextTheme } from "../App/ThingsContext"
+import React, { FC, memo } from "react"
 import { IStatus } from "interfaces/types"
-interface InputProps {
-    status: IStatus
+import Link from "next/link"
+import { useStore } from "effector-react"
+import { $status } from "features/initialApp"
+interface HeaderProps {
     title?: string
 }
 
-const Header: FC<InputProps> = ({ status, title }) => {
-    const context = useContext(ThingsContext)
+const Header: FC<HeaderProps> = ({ title }) => {
+    const status = useStore($status)
+
     return (
-        <header style={context.theme.header}>
-            <a href="/" className={styles.title}>
-                {title ? title : "Настройка кассиров"}
-            </a>
+        <header className="flex justify-between px-8 py-4 shadow-lg items-center bg-sky-900 text-white text-base">
+            <Link href="/">
+                <a className="font-bold  text-2xl">
+                    {title ? title : "Настройка кассиров"}
+                </a>
+            </Link>
+
             <div className="bulk"></div>
-            <span>Статус сервера: {status.Status}</span>
+            <span>Статус сервера: {status?.Status}</span>
         </header>
     )
 }

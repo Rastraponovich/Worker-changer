@@ -1,31 +1,28 @@
-import React, { FC, memo, useContext, useEffect, useState } from "react"
+import React, { FC, memo, useEffect } from "react"
 import { IStatus } from "interfaces/types"
-import ThingsContext from "../App/ThingsContext"
-import styles from "./footer.module.css"
-interface InputProps {
+import { useStore } from "effector-react"
+import { $status, $version, startTime } from "features/initialApp"
+import { useEvent } from "effector-react/scope"
+import Time from "./Time"
+interface FooterProps {
     status?: IStatus
 }
 
-const Footer: FC<InputProps> = ({ status }) => {
-    const [time, setTime] = useState("")
-    const context = useContext(ThingsContext)
+const Footer: FC<FooterProps> = () => {
+    const status = useStore($status)
+    const version = useStore($version)
+    const handleStartTime = useEvent(startTime)
 
     useEffect(() => {
-        setInterval(() => {
-            setTime(new Date().toLocaleString())
-        }, 1000)
-    }, [status])
+        handleStartTime()
+    }, [])
 
     return (
-        <footer style={context.theme.footer}>
-            <span className={styles.footerText}>Версия программы: 0.2.3</span>
-            <span className={styles.footerText}>
-                Версия сервера: {status.ServerVersion}
-            </span>
-            <span className={styles.footerText}>
-                Имя сервера: {status.NetName}
-            </span>
-            <span className={styles.footerText}>{time}</span>
+        <footer className="flex text-white justify-between bg-sky-900 items-center px-4 py-2">
+            <span>Версия программы: {version}</span>
+            <span>Версия сервера: {status?.ServerVersion}</span>
+            <span>Имя сервера: {status?.NetName}</span>
+            <Time />
         </footer>
     )
 }

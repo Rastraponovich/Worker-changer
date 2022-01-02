@@ -1,16 +1,23 @@
+import clsx from "clsx"
 import React, { memo, FC, ChangeEvent } from "react"
 
 import styles from "./select.module.css"
 
 interface InputProps {
     children: React.ReactNode
-    type?: string
     onChange?: (e: ChangeEvent<HTMLSelectElement>) => void
 }
 
-const Select: FC<InputProps> = ({ children, type, onChange }) => {
+const Select: FC<InputProps> = ({ children, onChange }) => {
     return (
-        <select id={type} onChange={onChange} className={styles.input}>
+        <select
+            onChange={onChange}
+            className={clsx(
+                "focus:outline-yellow-300 outline-4",
+                "focus-within::outline-yellow-300 outline-4",
+                "cursor-pointer py-4 px-3 mb-4 text-sky-900 text-base rounded font-normal"
+            )}
+        >
             {children}
         </select>
     )

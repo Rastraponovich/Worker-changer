@@ -4,22 +4,21 @@ import { useParser } from "@/hooks/usePareser"
 import { sendData } from "@/hooks/useGetData"
 import { getEmployees, getSystemInfo } from "@/schemas/schema"
 import { IEmployeesData, IWorker } from "interfaces/types"
+import { AxiosResponse } from "axios"
+import { ParsedGetWorkers } from "@/interfaces/parsedTypes"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const employeesSchema = getEmployees()
 
-    const request: IEmployeesData = await sendData(employeesSchema)
+    const response = await sendData(employeesSchema)
 
-    if (!request.error) {
-        const { CommandResult, ...status } = useParser(
-            request.data
-        ).RK7QueryResult[0]
-        const {
-            SourceCommand,
-            RK7Reference,
-            ...commandResult
-        } = CommandResult[0]
-        const workers: IWorker[] = RK7Reference[0].Items[0].Item.filter(
+    const parsedResponse: ParsedGetWorkers<IWorker> = useParser(response.data)
+
+    if (!response.error) {
+        const { CommandResult, ...status } = parsedResponse.RK7QueryResult
+        const { SourceCommand, RK7Reference, ...commandResult } = CommandResult
+
+        const workers: IWorker[] = RK7Reference.Items.Item.filter(
             (worker: IWorker) =>
                 worker.Status === "rsActive" &&
                 worker.genTaxPayerIdNum &&
@@ -29,16 +28,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             workers,
             commandResult,
             status,
-            error: request.error,
-            isAxiosError: request.isAxiosError,
+            error: response.error,
+            isAxiosError: response.isAxiosError,
         })
     } else {
         res.send({
             workers: [],
             commandResult: {},
             status: {},
-            error: request.error,
-            isAxiosError: request.isAxiosError,
+            error: response.error,
+            isAxiosError: response.isAxiosError,
         })
     }
 }
