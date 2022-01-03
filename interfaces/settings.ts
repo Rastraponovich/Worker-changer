@@ -1,5 +1,5 @@
 export type TSettings = {
-    id: number
+    id?: number
     name: string
     ref: string
     url: string

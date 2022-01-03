@@ -1,21 +1,30 @@
 import { memo } from "react"
 import { GetStaticProps, NextPage } from "next"
-import { useEvent, useList } from "effector-react"
+import { useEvent, useList, useStore } from "effector-react"
 import { allSettled, fork, serialize } from "effector"
 
-import { $settings, getSettings } from "features/settings"
+import {
+    $getSettingsPending,
+    $settings,
+    createNewSettings,
+    getSettings,
+} from "features/settings"
 
 import Link from "next/link"
 import Layout from "@/components/Layout/Layout"
 
 const SettingsPage: NextPage = () => {
     const handleGetData = useEvent(getSettings)
+    const handleCreateNewSettings = useEvent(createNewSettings)
+    const pending = useStore($getSettingsPending)
 
     return (
         <Layout title="Настройки">
             <button onClick={handleGetData}>getSettings</button>
+            <button onClick={handleCreateNewSettings}>create</button>
+
             {useList($settings, {
-                keys: [],
+                keys: [pending, $settings],
                 fn: (item) => (
                     <div className="grid grid-cols-1 w-full p-4">
                         <Link href={`/settings/${item.id}`}>

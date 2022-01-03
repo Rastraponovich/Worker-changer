@@ -10,9 +10,12 @@ import {
     getSettings,
     changeSelectedSetting,
     changeSelectedCheckBoxSetting,
+    updateSettings,
+    $updateSettingsPending,
+    deleteSettings,
+    $deleteSettingsPending,
 } from "features/settings"
 
-import Link from "next/link"
 import Layout from "@/components/Layout/Layout"
 import { useRouter } from "next/router"
 import CustomInput from "@/components/CustomComponents/CustomInput"
@@ -55,10 +58,15 @@ const CustomCheckBox: FC<CustomCheckBoxProps> = ({
 const SettingsPage: NextPage = () => {
     const handleGetData = useEvent(getOneSettings)
 
-    const { query } = useRouter()
+    const { query, back } = useRouter()
 
     const currentSettings = useStore($selectedSetting)
 
+    const updateSettingsPending = useStore($updateSettingsPending)
+    const deleteSettingsPending = useStore($deleteSettingsPending)
+
+    const handleSaveSettings = useEvent(updateSettings)
+    const handleDelete = useEvent(deleteSettings)
     return (
         <Layout title="Настройки">
             <button onClick={() => handleGetData(query.number.toString())}>
@@ -149,12 +157,24 @@ const SettingsPage: NextPage = () => {
                 />
             </div>
             <div className="flex justify-between w-full px-8 mt-4">
-                <button className="capitalize px-10 py-2 rounded bg-red-900 text-white shadow-lg hover:bg-red-700 active:opacity-70 transition-all duration-100">
+                <button
+                    onClick={back}
+                    className="capitalize px-10 py-2 rounded bg-red-900 text-white shadow-lg hover:bg-red-700 active:opacity-70 transition-all duration-100"
+                >
                     назад
                 </button>
+                <button
+                    onClick={handleDelete}
+                    className="capitalize px-10 py-2 rounded bg-red-900 text-white shadow-lg hover:bg-red-700 active:opacity-70 transition-all duration-100"
+                >
+                    {deleteSettingsPending ? "удаление" : "удалить"}
+                </button>
 
-                <button className="capitalize px-10 py-2 rounded bg-sky-900 text-white shadow-lg hover:bg-sky-700 active:opacity-70 transition-all duration-100">
-                    сохранить
+                <button
+                    onClick={handleSaveSettings}
+                    className="capitalize px-10 py-2 rounded bg-sky-900 text-white shadow-lg hover:bg-sky-700 active:opacity-70 transition-all duration-100"
+                >
+                    {updateSettingsPending ? "сохраненяется" : "сохранить"}
                 </button>
             </div>
         </Layout>
