@@ -47,7 +47,7 @@ const Cashier: FC<CashierProps> = (props) => {
             )}
         >
             <div className="flex  justify-between items-center">
-                <h3> Кассир: {title}</h3>
+                <h3 className="text-xl font-semibold"> Кассир: {title}</h3>
                 <button
                     className="px-4 py-2 rounded border-white border uppercase"
                     onClick={handleGetInfo}
@@ -56,16 +56,42 @@ const Cashier: FC<CashierProps> = (props) => {
                 </button>
             </div>
             <div className="space-y-2 flex flex-col">
-                <span>ФИО: {worker.OfficialName}</span>
-                <span>ИНН: {worker.genTaxPayerIdNum}</span>
-                {worker.genTaxPayerIdNum !==
-                    selectedWorker.genTaxPayerIdNum && (
-                    <div className="px-2 py-4 border border-white space-y-2 flex flex-col">
-                        <h3>Кассир поменяется на:</h3>
-                        <span>ФИО: {selectedWorker.OfficialName}</span>
-                        <span>ИНН: {selectedWorker.genTaxPayerIdNum}</span>
-                    </div>
-                )}
+                <div className="text-sm grid grid-cols-7 justify-center items-center">
+                    <span className="col-span-3">
+                        ФИО: {worker.OfficialName}
+                    </span>
+
+                    {worker.genTaxPayerIdNum !==
+                        selectedWorker.genTaxPayerIdNum && (
+                        <>
+                            <span className="text-base text-yellow-300 col-span-1">
+                                &rarr;
+                            </span>
+                            <span className="text-yellow-300 italic text-right col-span-3">
+                                {selectedWorker.OfficialName}
+                            </span>
+                        </>
+                    )}
+                </div>
+                <div className="text-sm grid grid-cols-7 justify-center items-center">
+                    <span className="col-span-3">
+                        ИНН: {worker.genTaxPayerIdNum}
+                    </span>
+
+                    {worker.genTaxPayerIdNum !==
+                        selectedWorker.genTaxPayerIdNum && (
+                        <>
+                            <span className="text-base text-yellow-300 col-span-1">
+                                &rarr;
+                            </span>
+
+                            <span className="text-yellow-300 italic text-right col-span-3">
+                                {selectedWorker.genTaxPayerIdNum}
+                            </span>
+                        </>
+                    )}
+                </div>
+
                 <Select onChange={handleSelectWorker}>
                     {useList($employeesArray, {
                         keys: [selectedWorker],

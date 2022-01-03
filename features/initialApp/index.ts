@@ -21,7 +21,7 @@ const getStatus = createEvent()
 
 const $status = createStore<RK7QueryResult>(null)
 
-const $version = createStore("2.0.0")
+const $version = createStore("2.0.1")
 
 const $initalState = createStore<boolean>(false).reset(getStatusFx.pending)
 

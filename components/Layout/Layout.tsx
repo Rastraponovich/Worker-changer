@@ -24,7 +24,9 @@ const Layout: FC<LayoutProps> = ({ children, title }) => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header title={title} />
-            <main className="flex flex-col py-4 items-center">{children}</main>
+            <main className="flex flex-col py-4 px-4 items-center">
+                {children}
+            </main>
             <div className="grow"></div>
             <Footer />
         </>
