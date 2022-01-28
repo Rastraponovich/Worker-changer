@@ -1,19 +1,34 @@
 import { GetStaticProps, NextPage } from "next"
-import React, { memo } from "react"
+import React, { memo, useEffect } from "react"
 
 import Layout from "@/components/Layout/Layout"
 import InfoBlock from "@/components/InfoBlock/InfoBlock"
 import { useEvent, useStore } from "effector-react/scope"
-import { $loadingWorkers, getWorkers } from "features/workers"
+import {
+    $errorGetWorker,
+    $getWorkersStatus,
+    $loadingWorkers,
+    getWorkers,
+} from "features/workers"
 import { allSettled, fork, serialize } from "effector"
 import CashierList from "@/components/CashierList/CashierList"
+import { useRouter } from "next/router"
 
 interface WorkersPageProps {}
 
 const WorkersPage: NextPage<WorkersPageProps> = () => {
     const loading = useStore($loadingWorkers)
 
+    const error = useStore($errorGetWorker)
+
     const handleGetStatus = useEvent(getWorkers)
+    const router = useRouter()
+
+    useEffect(() => {
+        if (error) {
+            router.push("/401")
+        }
+    }, [error, router])
 
     return (
         <Layout title="Настройка кассиров">

@@ -1,16 +1,7 @@
-import { CommandResult } from "@/interfaces/rk7Api"
-import { IWorker, IWorkerChangeRespose } from "@/interfaces/types"
-import { AxiosResponse } from "axios"
-import {
-    attach,
-    createEffect,
-    createEvent,
-    createStore,
-    forward,
-    sample,
-} from "effector"
-import { iternalAPI } from "lib/api"
+import { IWorker } from "@/interfaces/types"
+import { attach, createEvent, createStore, forward, sample } from "effector"
 import { ChangeEvent } from "react"
+import { getWorkersFx, saveWorkerFx, getWorkerFx } from "./api"
 
 const defaultWoker: IWorker = {
     genTaxPayerIdNum: null,
@@ -22,44 +13,20 @@ const defaultWoker: IWorker = {
     GUIDString: "",
 } as IWorker
 
-type APIResponse = {
-    workers: IWorker[]
-    commandResult: CommandResult
-    status: any
-    error: boolean
-    isAxiosError: boolean
-}
-
-const API = async () => await iternalAPI.get("/workers")
-
-const getWorkerAPI = async (guid: string) =>
-    await iternalAPI.get(`/workers/${guid}`)
-
-const SaveWorkerAPI = async (worker: IWorker) =>
-    await iternalAPI.post("/setworker", { worker })
-
 //--------------------------//
 
-const getWorkerFx = createEffect<
-    string,
-    AxiosResponse<{ worker: IWorker }>,
-    Error
->(getWorkerAPI)
-const saveWorkerFx = createEffect<
-    IWorker,
-    AxiosResponse<IWorkerChangeRespose>,
-    Error
->(SaveWorkerAPI)
-
-const getWorkersFx = createEffect<never, AxiosResponse<APIResponse>, Error>(API)
-
-const $loadingWorkers = createStore<boolean>(false).on(
-    getWorkersFx.pending,
-    (_, payload) => payload
-)
+const $loadingWorkers = createStore<boolean>(false).on(getWorkersFx.pending, (_, payload) => payload)
 
 const $workers = createStore<IWorker[]>([]).reset(getWorkersFx.pending)
 const getWorkers = createEvent()
+
+const $getWorkersStatus = createStore<boolean>(false)
+    .on(getWorkersFx.doneData, () => true)
+    .reset(getWorkers)
+
+const $errorGetWorker = createStore<boolean>(false)
+    .on(getWorkersFx.fail, () => true)
+    .reset(getWorkers)
 
 sample({
     clock: getWorkersFx.doneData,
@@ -76,10 +43,7 @@ const $employeesArray = createStore<IWorker[]>([]).reset(getWorkersFx.pending)
 
 sample({
     clock: $workers,
-    fn: (workers) =>
-        workers.filter(
-            (item) => item.Name !== "Кассир ИП" && item.Name !== "Кассир ООО"
-        ),
+    fn: (workers) => workers.filter((item) => item.Name !== "Кассир ИП" && item.Name !== "Кассир ООО"),
     target: $employeesArray,
 })
 
@@ -93,10 +57,7 @@ sample({
     target: $currentIPWorker,
 })
 
-const $newIPWorker = createStore<IWorker>({} as IWorker).on(
-    $currentIPWorker,
-    (_, worker) => worker
-)
+const $newIPWorker = createStore<IWorker>({} as IWorker).on($currentIPWorker, (_, worker) => worker)
 
 sample({
     clock: selectNewIPWorker,
@@ -160,10 +121,7 @@ sample({
     target: $currentOOOWorker,
 })
 
-const $newOOOWorker = createStore<IWorker>({} as IWorker).on(
-    $currentOOOWorker,
-    (_, worker) => worker
-)
+const $newOOOWorker = createStore<IWorker>({} as IWorker).on($currentOOOWorker, (_, worker) => worker)
 
 sample({
     clock: selectNewOOOWorker,
@@ -224,4 +182,6 @@ export {
     saveOOOWorker,
     saveIPWorker,
     refreshIPWorker,
+    $getWorkersStatus,
+    $errorGetWorker,
 }

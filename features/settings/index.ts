@@ -1,13 +1,7 @@
 import { TSettings } from "@/interfaces/settings"
 import { createEvent, createStore, forward, sample } from "effector"
 import { ChangeEvent } from "react"
-import {
-    createNewSettingsFx,
-    deleteSettingsFx,
-    getSettingsFx,
-    updateSettingsFx,
-    getOneSettingsFx,
-} from "./api"
+import { createNewSettingsFx, deleteSettingsFx, getSettingsFx, updateSettingsFx, getOneSettingsFx } from "./api"
 
 const bulkSettings: TSettings = {
     name: "",
@@ -25,19 +19,10 @@ const getSettings = createEvent()
 
 const $settings = createStore<TSettings[]>([])
 
-const $getSettingsPending = createStore<boolean>(false).on(
-    getSettingsFx.pending,
-    (state, payload) => payload
-)
-const $updateSettingsPending = createStore<boolean>(false).on(
-    updateSettingsFx.pending,
-    (state, newState) => newState
-)
+const $getSettingsPending = createStore<boolean>(false).on(getSettingsFx.pending, (_, payload) => payload)
+const $updateSettingsPending = createStore<boolean>(false).on(updateSettingsFx.pending, (_, newState) => newState)
 
-const $deleteSettingsPending = createStore<boolean>(false).on(
-    deleteSettingsFx.pending,
-    (state, payload) => payload
-)
+const $deleteSettingsPending = createStore<boolean>(false).on(deleteSettingsFx.pending, (_, payload) => payload)
 
 sample({
     clock: [getSettings, createNewSettingsFx.doneData],
@@ -56,8 +41,7 @@ const getOneSettings = createEvent<string>()
 const $selectedSetting = createStore<TSettings>({} as TSettings)
 
 const changeSelectedSetting = createEvent<ChangeEvent<HTMLInputElement>>()
-const changeSelectedCheckBoxSetting =
-    createEvent<ChangeEvent<HTMLInputElement>>()
+const changeSelectedCheckBoxSetting = createEvent<ChangeEvent<HTMLInputElement>>()
 
 forward({
     from: getOneSettings,

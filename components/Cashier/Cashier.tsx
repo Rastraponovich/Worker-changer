@@ -43,20 +43,20 @@ const Cashier: FC<CashierProps> = (props) => {
         <form
             onSubmit={handleSave}
             className={clsx(
-                "text-base space-y-4 m-4 bg-sky-900 shadow-lg flex flex-col p-4 rounded justify-between"
+                "m-4 flex flex-col justify-between space-y-4 rounded bg-sky-900 p-4 text-base shadow-lg"
             )}
         >
-            <div className="flex  justify-between items-center">
+            <div className="flex  items-center justify-between">
                 <h3 className="text-xl font-semibold"> Кассир: {title}</h3>
                 <button
-                    className="px-4 py-2 rounded border-white border uppercase"
+                    className="rounded border border-white px-4 py-2 uppercase hover:bg-white hover:text-sky-900"
                     onClick={handleGetInfo}
                 >
                     Обновить
                 </button>
             </div>
-            <div className="space-y-2 flex flex-col">
-                <div className="text-sm grid grid-cols-7 justify-center items-center">
+            <div className="flex flex-col space-y-2">
+                <div className="grid grid-cols-7 items-center justify-center text-sm">
                     <span className="col-span-3">
                         ФИО: {worker.OfficialName}
                     </span>
@@ -64,16 +64,16 @@ const Cashier: FC<CashierProps> = (props) => {
                     {worker.genTaxPayerIdNum !==
                         selectedWorker.genTaxPayerIdNum && (
                         <>
-                            <span className="text-base text-yellow-300 col-span-1">
+                            <span className="col-span-1 text-base text-yellow-300">
                                 &rarr;
                             </span>
-                            <span className="text-yellow-300 italic text-right col-span-3">
+                            <span className="col-span-3 text-right italic text-yellow-300">
                                 {selectedWorker.OfficialName}
                             </span>
                         </>
                     )}
                 </div>
-                <div className="text-sm grid grid-cols-7 justify-center items-center">
+                <div className="grid grid-cols-7 items-center justify-center text-sm">
                     <span className="col-span-3">
                         ИНН: {worker.genTaxPayerIdNum}
                     </span>
@@ -81,11 +81,11 @@ const Cashier: FC<CashierProps> = (props) => {
                     {worker.genTaxPayerIdNum !==
                         selectedWorker.genTaxPayerIdNum && (
                         <>
-                            <span className="text-base text-yellow-300 col-span-1">
+                            <span className="col-span-1 text-base text-yellow-300">
                                 &rarr;
                             </span>
 
-                            <span className="text-yellow-300 italic text-right col-span-3">
+                            <span className="col-span-3 text-right italic text-yellow-300">
                                 {selectedWorker.genTaxPayerIdNum}
                             </span>
                         </>
@@ -119,8 +119,8 @@ const Cashier: FC<CashierProps> = (props) => {
                 <button
                     type="submit"
                     className={clsx(
-                        "hover:bg-sky-900 hover:text-white hover:border-white",
-                        "transiton-all duration-150 cursor-pointer flex justify-center items-center bg-white text-sky-900 px-4 py-2 outline-none rounded border-2 border-transparent "
+                        "hover:border-white hover:bg-sky-900 hover:text-white",
+                        "transiton-all flex cursor-pointer items-center justify-center rounded border-2 border-transparent bg-white px-4 py-2 text-sky-900 outline-none duration-150 "
                     )}
                 >
                     Изменить

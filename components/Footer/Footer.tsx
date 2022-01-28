@@ -18,12 +18,6 @@ const Footer: FC<FooterProps> = () => {
     }, [])
 
     return (
-<<<<<<< HEAD
-        <footer className="flex text-white justify-between bg-sky-900 items-center px-4 py-2">
-            <span>Версия программы: {version}</span>
-            <span>Версия сервера: {status?.ServerVersion}</span>
-            <span>Имя сервера: {status?.NetName}</span>
-=======
         <footer className="  grid grid-cols-4 lg:grid-cols-12 text-white justify-items-center  bg-sky-900 items-center px-4 py-2">
             <span className="col-span-2 lg:col-span-3 justify-self-start">
                 Версия программы: {version}
@@ -34,7 +28,6 @@ const Footer: FC<FooterProps> = () => {
             <span className="justify-self-start lg:justify-self-center col-span-2 lg:col-span-3">
                 Имя сервера: {status?.NetName}
             </span>
->>>>>>> settings
             <Time />
         </footer>
     )

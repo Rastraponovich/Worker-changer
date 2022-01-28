@@ -1,31 +1,21 @@
 import { AxiosResponse } from "axios"
-import {
-    createEffect,
-    createEvent,
-    createStore,
-    forward,
-    sample,
-    scopeBind,
-} from "effector"
-import { iternalAPI } from "lib/api"
+import { createEffect, createEvent, createStore, forward, sample, scopeBind } from "effector"
+
+import config from "package.json"
 
 import { RK7QueryResult } from "@/interfaces/rk7Api"
+import { getWorkers } from "features/workers"
+import { API } from "features/api"
 
-const API = async () => await iternalAPI.get("/status")
+const startApp = createEvent()
 
-const getStatusFx = createEffect<never, AxiosResponse<RK7QueryResult>, Error>(
-    API
-)
+const getStatusFx = createEffect<never, AxiosResponse<RK7QueryResult>, Error>(API.getStatusAPI)
 
 const getStatus = createEvent()
 
 const $status = createStore<RK7QueryResult>(null)
 
-<<<<<<< HEAD
-const $version = createStore("2.0.0")
-=======
-const $version = createStore("2.0.1")
->>>>>>> settings
+const $version = createStore(config.version)
 
 const $initalState = createStore<boolean>(false).reset(getStatusFx.pending)
 
@@ -70,4 +60,9 @@ sample({
     target: $time,
 })
 
-export { getStatus, $status, $initalState, $version, $time, startTime }
+forward({
+    from: startApp,
+    to: [getStatus, getWorkers],
+})
+
+export { startApp, getStatus, $status, $initalState, $version, $time, startTime }

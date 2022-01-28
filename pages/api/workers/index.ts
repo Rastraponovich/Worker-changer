@@ -32,7 +32,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             isAxiosError: response.isAxiosError,
         })
     } else {
-        res.send({
+        res.status(500).send({
             workers: [],
             commandResult: {},
             status: {},
