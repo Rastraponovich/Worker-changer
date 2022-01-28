@@ -19,7 +19,7 @@ interface CashierListProps {}
 const CashierList: FC<CashierListProps> = () => {
     return (
         <section className="flex flex-col grow w-full">
-            <div className="flex flex-wrap justify-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-4">
                 <Cashier
                     title="ИП"
                     selectedWorker={$newIPWorker}
