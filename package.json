@@ -1,6 +1,6 @@
 {
     "name": "front",
-    "version": "2.0.2",
+    "version": "2.2.0",
     "main": "main/index.js",
     "productName": "WorkerChangerNextJs",
     "license": "MIT",
@@ -10,7 +10,8 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\""
+        "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\"",
+        "version-minor": "version minor --no-git-tag-version"
     },
     "dependencies": {
         "@headlessui/react": "^1.4.2",
