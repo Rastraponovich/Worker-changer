@@ -43,7 +43,7 @@ const Cashier: FC<CashierProps> = (props) => {
         <form
             onSubmit={handleSave}
             className={clsx(
-                "text-base space-y-4 m-4 bg-sky-900 shadow-lg flex flex-col p-4 rounded"
+                "text-base space-y-4 m-4 bg-sky-900 shadow-lg flex flex-col p-4 rounded justify-between"
             )}
         >
             <div className="flex  justify-between items-center">
@@ -91,7 +91,7 @@ const Cashier: FC<CashierProps> = (props) => {
                         </>
                     )}
                 </div>
-
+                <div className="grow"></div>
                 <Select onChange={handleSelectWorker}>
                     {useList($employeesArray, {
                         keys: [selectedWorker],
