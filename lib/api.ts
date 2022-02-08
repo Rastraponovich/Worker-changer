@@ -2,7 +2,7 @@ import { IAuth } from "@/interfaces/types"
 import axios from "axios"
 import { Agent } from "https"
 
-const iternalAPI = axios.create({ baseURL: `${process.env.NEXT_PUBLIC_SELF_HOST}/api` || "http://localhost:3000/api" })
+const iternalAPI = axios.create({ baseURL: `${process.env.NEXT_PUBLIC_SELF_HOST}/api` || "http://10.20.25.2:3000/api" })
 
 const agent = new Agent({
     rejectUnauthorized: false,
