@@ -9,6 +9,11 @@ import { API } from "features/api"
 
 const startApp = createEvent()
 
+// sample({
+//     clock: startApp,
+//     target: getWorkers,
+// })
+
 const getStatusFx = createEffect<never, AxiosResponse<RK7QueryResult>, Error>(API.getStatusAPI)
 
 const getStatus = createEvent()
@@ -62,7 +67,7 @@ sample({
 
 forward({
     from: startApp,
-    to: [getStatus, getWorkers],
+    to: getStatus,
 })
 
 export { startApp, getStatus, $status, $initalState, $version, $time, startTime }

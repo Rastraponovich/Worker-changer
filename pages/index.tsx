@@ -4,13 +4,8 @@ import { allSettled, fork, serialize } from "effector"
 import { useStore } from "effector-react"
 import { useEvent } from "effector-react/scope"
 import { $initalState, getStatus, startApp } from "features/initialApp"
-import {
-    $errorGetWorker,
-    $getWorkersStatus,
-    $workers,
-    getWorkers,
-} from "features/workers"
-import { GetStaticProps, NextPage } from "next"
+import { $errorGetWorker, $getWorkersStatus, $workers, getWorkers } from "features/workers"
+import { GetServerSideProps, GetStaticProps, NextPage } from "next"
 import { useRouter } from "next/router"
 import React, { memo, FC } from "react"
 import { useEffect } from "react"
@@ -18,6 +13,11 @@ import { useEffect } from "react"
 interface MainPageProps {}
 
 const MainPage: NextPage<MainPageProps> = () => {
+    const getWorkersEvent = useEvent(getWorkers)
+
+    useEffect(() => {
+        getWorkersEvent()
+    }, [])
     const { push } = useRouter()
 
     const error = useStore($errorGetWorker)
@@ -26,6 +26,7 @@ const MainPage: NextPage<MainPageProps> = () => {
 
     const loadingWorkersStatus = useStore($getWorkersStatus)
 
+    let timerId: any
     useEffect(() => {
         if (loadingWorkersStatus) {
             setTimeout(() => {
@@ -36,9 +37,12 @@ const MainPage: NextPage<MainPageProps> = () => {
 
     useEffect(() => {
         if (error) {
-            push("/401")
+            timerId = setTimeout(() => {
+                push("/401")
+            }, 4000)
         }
-    }, [error, push])
+        return () => clearTimeout(timerId)
+    }, [error])
 
     const workers = useStore($workers)
     return (
@@ -58,7 +62,7 @@ const MainPage: NextPage<MainPageProps> = () => {
     )
 }
 
-export default memo(MainPage)
+export default MainPage
 
 export const getStaticProps: GetStaticProps = async () => {
     const scope = fork()
@@ -67,7 +71,5 @@ export const getStaticProps: GetStaticProps = async () => {
 
     const serialized = serialize(scope)
 
-    return {
-        props: { initialState: serialized },
-    }
+    return { revalidate: 10, props: { initialState: serialized } }
 }

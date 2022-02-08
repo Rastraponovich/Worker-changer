@@ -1,5 +1,5 @@
 import Head from "next/head"
-import React, { FC, memo, useEffect } from "react"
+import React, { FC, memo, ReactNode, useEffect } from "react"
 
 import Header from "@/components/Header/Header"
 import Footer from "@/components/Footer/Footer"
@@ -7,7 +7,7 @@ import { useEvent } from "effector-react/scope"
 import { getStatus } from "features/initialApp"
 
 interface LayoutProps {
-    children: any
+    children: ReactNode
     title?: string
 }
 const Layout: FC<LayoutProps> = ({ children, title }) => {
@@ -24,9 +24,7 @@ const Layout: FC<LayoutProps> = ({ children, title }) => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header title={title} />
-            <main className="flex flex-col py-4 px-4 items-center">
-                {children}
-            </main>
+            <main className="flex flex-col items-center p-4">{children}</main>
             <div className="grow"></div>
             <Footer />
         </>

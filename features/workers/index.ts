@@ -17,7 +17,7 @@ const defaultWoker: IWorker = {
 
 const $loadingWorkers = createStore<boolean>(false).on(getWorkersFx.pending, (_, payload) => payload)
 
-const $workers = createStore<IWorker[]>([]).reset(getWorkersFx.pending)
+const $workers = createStore<IWorker[]>([], { sid: "workers" }).reset(getWorkersFx.pending)
 const getWorkers = createEvent()
 
 const $getWorkersStatus = createStore<boolean>(false)
