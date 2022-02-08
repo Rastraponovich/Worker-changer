@@ -1,6 +1,6 @@
 {
     "name": "front",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "main": "main/index.js",
     "productName": "WorkerChangerNextJs",
     "license": "MIT",
@@ -11,7 +11,7 @@
         "start": "next start",
         "lint": "next lint",
         "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\"",
-        "version-minor": "version minor --no-git-tag-version"
+        "version-minor": "npm version minor --no-git-tag-version"
     },
     "dependencies": {
         "@headlessui/react": "^1.4.2",
@@ -22,6 +22,7 @@
         "@typescript-eslint/eslint-plugin": "^5.8.1",
         "axios": "^0.21.1",
         "clsx": "^1.1.1",
+        "cors": "^2.8.5",
         "effector": "^22.1.2",
         "effector-react": "^22.0.6",
         "fast-xml-parser": "^3.19.0",
@@ -29,7 +30,8 @@
         "he": "^1.2.0",
         "https": "^1.0.0",
         "next": "^12.0.7",
-        "patronum": "^1.1.0",
+        "nextjs-cors": "^2.1.0",
+        "patronum": "^1.7.0",
         "postcss-import": "^14.0.2",
         "prettier": "^2.5.1",
         "react": "17.0.2",
@@ -37,6 +39,7 @@
         "uuid": "^8.3.2"
     },
     "devDependencies": {
+        "@types/cors": "^2.8.12",
         "@types/he": "^1.1.1",
         "@types/node": "^16.6.1",
         "@types/react": "^17.0.3",

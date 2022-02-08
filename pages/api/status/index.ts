@@ -4,8 +4,16 @@ import { useParser } from "@/hooks/usePareser"
 import { sendData } from "@/hooks/useGetData"
 import { getSystemInfo } from "@/schemas/schema"
 import { ParsedSystemInfo } from "@/interfaces/parsedTypes"
+import NextCors from "nextjs-cors"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+    await NextCors(req, res, {
+        // Options
+        methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+        origin: "*",
+        allowedHeaders: "*",
+        optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    })
     const schema = getSystemInfo()
 
     const response = await sendData(schema)
