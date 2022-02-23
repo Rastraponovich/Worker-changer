@@ -1,7 +1,3 @@
-import React, { FC, memo, useCallback } from "react"
-
-import { IWorker } from "interfaces/types"
-
 import Cashier from "../Cashier/Cashier"
 import {
     $currentIPWorker,
@@ -12,13 +8,19 @@ import {
     saveOOOWorker,
     selectNewIPWorker,
     selectNewOOOWorker,
+    $saveIPWorkerPending,
+    $saveOOOWorkerPending,
+    $refreshIPPending,
+    $refreshOOOPending,
+    refreshIPWorker,
+    refreshOOOWorker,
 } from "features/workers"
 
 interface CashierListProps {}
 
-const CashierList: FC<CashierListProps> = () => {
+const CashierList = () => {
     return (
-        <section className="flex flex-col grow w-full">
+        <section className="flex w-full grow flex-col">
             <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-4">
                 <Cashier
                     title="ИП"
@@ -26,6 +28,9 @@ const CashierList: FC<CashierListProps> = () => {
                     change={selectNewIPWorker}
                     worker={$currentIPWorker}
                     onSave={saveIPWorker}
+                    onSavePending={$saveIPWorkerPending}
+                    onRefreshPending={$refreshIPPending}
+                    onRefresh={refreshIPWorker}
                 />
                 <Cashier
                     title="ООО"
@@ -33,6 +38,9 @@ const CashierList: FC<CashierListProps> = () => {
                     change={selectNewOOOWorker}
                     worker={$currentOOOWorker}
                     onSave={saveOOOWorker}
+                    onSavePending={$saveOOOWorkerPending}
+                    onRefreshPending={$refreshOOOPending}
+                    onRefresh={refreshOOOWorker}
                 />
             </div>
             <div className="bulk" />
@@ -52,4 +60,4 @@ const CashierList: FC<CashierListProps> = () => {
     )
 }
 
-export default memo(CashierList)
+export default CashierList
