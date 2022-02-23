@@ -3,32 +3,37 @@ import { IWorker } from "interfaces/types"
 
 import Select from "../UI/Select/Select"
 import clsx from "clsx"
-import { $employeesArray, refreshIPWorker } from "features/workers"
+import { $employeesArray } from "features/workers"
 import { useEvent, useList, useStore } from "effector-react"
 import { Event, Store } from "effector"
 import Button from "../UI/Button/Button"
+import { WorkerProps } from "features/workers/types"
 
 interface CashierProps {
-    worker: Store<IWorker>
-    selectedWorker?: Store<IWorker>
+    workerProps: WorkerProps
     title: string
-    change: Event<ChangeEvent<HTMLSelectElement>>
-    onSave: Event<void>
-    onSavePending: Store<boolean>
-    onRefreshPending: Store<boolean>
-    onRefresh: Event<void>
 }
 
 const Cashier = (props: CashierProps) => {
-    const { title, change, onSavePending, onSave, onRefreshPending, onRefresh } = props
-    const worker = useStore(props.worker)
-    const selectedWorker = useStore(props.selectedWorker)
-    const refreshPending = useStore(onRefreshPending)
-    const pending = useStore(onSavePending)
+    const { title, workerProps } = props
+    const {
+        $currentWorker,
+        $getWorkerPending,
+        $saveWorkerPending,
+        saveWorker,
+        selectWorker,
+        $newWorker,
+        refreshWorker,
+    } = workerProps
 
-    const handleSaveWorker = useEvent(onSave)
-    const handleSelectWorker = useEvent(change)
-    const handleRefresh = useEvent(onRefresh)
+    const worker = useStore($currentWorker)
+    const selectedWorker = useStore($newWorker)
+    const refreshPending = useStore($getWorkerPending)
+    const pending = useStore($saveWorkerPending)
+
+    const handleSaveWorker = useEvent(saveWorker)
+    const handleSelectWorker = useEvent(selectWorker)
+    const handleRefresh = useEvent(refreshWorker)
 
     const handleSave = (event: ChangeEvent<HTMLFormElement>) => {
         event.preventDefault()

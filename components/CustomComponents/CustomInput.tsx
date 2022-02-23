@@ -1,6 +1,6 @@
 import { Event } from "effector"
 import { useEvent } from "effector-react"
-import React, { memo, FC, ChangeEvent, HTMLInputTypeAttribute } from "react"
+import { memo, ChangeEvent, HTMLInputTypeAttribute } from "react"
 
 interface CustomInputProps {
     title: string
@@ -13,7 +13,7 @@ interface CustomInputProps {
     name?: string
     disabled?: boolean
 }
-const CustomInput: FC<CustomInputProps> = ({
+const CustomInput = ({
     title,
     value,
     onChange,
@@ -23,7 +23,7 @@ const CustomInput: FC<CustomInputProps> = ({
     titleClassName,
     name,
     disabled,
-}) => {
+}: CustomInputProps) => {
     const handleChange = useEvent(onChange)
 
     return (
