@@ -1,6 +1,6 @@
 {
     "name": "front",
-    "version": "2.3.2",
+    "version": "2.3.3",
     "main": "main/index.js",
     "productName": "WorkerChangerNextJs",
     "license": "MIT",
@@ -24,7 +24,7 @@
         "clsx": "^1.1.1",
         "cors": "^2.8.5",
         "daisyui": "^2.2.0",
-        "effector": "^22.1.2",
+        "effector": "^22.2.0",
         "effector-react": "^22.0.6",
         "fast-xml-parser": "3.19.0",
         "fs": "^0.0.1-security",
