@@ -1,5 +1,6 @@
 import { IWorker } from "@/interfaces/types"
 import { attach, createEvent, createStore, forward, sample } from "effector"
+import { debug } from "patronum"
 import { ChangeEvent } from "react"
 import { getWorkersFx, saveWorkerFx, getWorkerFx } from "./api"
 
@@ -168,6 +169,13 @@ sample({
     target: $currentOOOWorker,
 })
 
+const $saveOOOWorkerPending = createStore<boolean>(false).on(saveOOOWorkerFx.pending, (_, state) => state)
+
+const $saveIPWorkerPending = createStore<boolean>(false).on(saveIPWorkerFx.pending, (_, state) => state)
+
+const $refreshOOOPending = createStore<boolean>(false).on(getOOOWorkerFx.pending, (state, pending) => pending)
+const $refreshIPPending = createStore<boolean>(false).on(getIPWorkerFx.pending, (state, pending) => pending)
+
 export {
     getWorkers,
     $workers,
@@ -182,6 +190,11 @@ export {
     saveOOOWorker,
     saveIPWorker,
     refreshIPWorker,
+    refreshOOOWorker,
     $getWorkersStatus,
     $errorGetWorker,
+    $saveOOOWorkerPending,
+    $saveIPWorkerPending,
+    $refreshOOOPending,
+    $refreshIPPending,
 }
