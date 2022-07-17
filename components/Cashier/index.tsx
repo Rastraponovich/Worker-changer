@@ -3,13 +3,14 @@ import { useStore, useEvent } from "effector-react"
 import { memo, ChangeEvent, useCallback } from "react"
 
 import type { WorkerProps } from "features/workers/types"
+import type { IWorker } from "src/shared/lib/models"
 
 import { $employeesArray } from "features/workers"
-import { Button } from "src/shared/ui/button"
-import { Select } from "src/shared/ui/select"
+
 import { SubmitCashier } from "src/features/submit-cashier"
 import { RefreshCurrentCashier } from "src/features/refresh-current-cashier/ui"
-import { IWorker } from "src/shared/lib/models"
+
+import { Select } from "src/shared/ui/select"
 
 interface CashierProps {
     workerProps: WorkerProps
