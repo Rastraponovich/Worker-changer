@@ -28,7 +28,7 @@ export const getEmployeesByName = (name: string, parentIdent: string) => {
 
 export const getEmployees = () => `<?xml version="1.0" encoding="windows-1251"?>
     <RK7Query>
-        <RK7Command2 CMD="GetRefData" RefName="EMPLOYEES" WithMacroProp="1" PropMask="items.(Code,Name,Ident,genTaxPayerIdNum,OfficialName,Status, GUIDString)" >
+        <RK7Command2 CMD="GetRefData" RefName="EMPLOYEES" WithMacroProp="1" PropMask="items.(Code,Name,Ident,genTaxPayerIdNum,OfficialName,Status,GUIDString)" >
             <PROPFILTERS>
                 <PROPFILTER name="MainParentIdent" value="${process.env.MAINPARENTIDENT}"/>
 
