@@ -1,6 +1,7 @@
 import { IWorker } from "@/interfaces/types"
 import { createEvent, createStore, forward, sample, scopeBind } from "effector"
-import { getWorkersFx } from "./api"
+import { debug } from "patronum"
+import { getWorkersFx, saveWorkerFx } from "./api"
 import { createWorkerFactory } from "./factory"
 import { WorkerProps } from "./types"
 
@@ -41,7 +42,6 @@ sample({
 const createdIPWorker = createWorkerFactory({ $employeesArray, name: "Кассир ИП" })
 
 createdIPWorker.$currentWorker.on($workers, (_, workers) => workers.find((worker) => worker.Name === "Кассир ИП"))
-
 const createdOOOWorker = createWorkerFactory({ $employeesArray, name: "Кассир ООО" })
 createdOOOWorker.$currentWorker.on($workers, (_, workers) => workers.find((worker) => worker.Name === "Кассир ООО"))
 

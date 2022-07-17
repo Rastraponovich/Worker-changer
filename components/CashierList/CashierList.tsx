@@ -1,5 +1,6 @@
 import Cashier from "../Cashier/Cashier"
 import { oooWorker, ipWorker } from "features/workers"
+import Alert from "../UI/Alert/Alert"
 
 const CashierList = () => {
     return (
@@ -9,6 +10,7 @@ const CashierList = () => {
                 <Cashier title="ООО" workerProps={oooWorker} />
             </div>
             <div className="bulk" />
+            {/* <Alert /> */}
         </section>
     )
 }

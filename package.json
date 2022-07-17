@@ -1,6 +1,6 @@
 {
     "name": "front",
-    "version": "2.3.3",
+    "version": "2.3.4",
     "main": "main/index.js",
     "productName": "WorkerChangerNextJs",
     "license": "MIT",
