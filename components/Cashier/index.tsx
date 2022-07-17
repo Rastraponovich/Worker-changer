@@ -7,6 +7,9 @@ import type { WorkerProps } from "features/workers/types"
 import { $employeesArray } from "features/workers"
 import { Button } from "src/shared/ui/button"
 import { Select } from "src/shared/ui/select"
+import { SubmitCashier } from "src/features/submit-cashier"
+import { RefreshCurrentCashier } from "src/features/refresh-current-cashier/ui"
+import { IWorker } from "src/shared/lib/models"
 
 interface CashierProps {
     workerProps: WorkerProps
@@ -53,47 +56,59 @@ export const Cashier = memo((props: CashierProps) => {
         >
             <div className="flex  items-center justify-between">
                 <h3 className="text-xl font-semibold"> Кассир: {title}</h3>
-                <Button onClick={handleGetInfo} pending={refreshPending}>
-                    Обновить
-                </Button>
+                <RefreshCurrentCashier onClick={handleGetInfo} pending={refreshPending} />
             </div>
             <div className="flex flex-col space-y-2">
-                <div className="grid grid-cols-7 items-center justify-center text-sm">
-                    <span className="col-span-3">ФИО: {worker.OfficialName}</span>
+                <FIO worker={worker} selectedWorker={selectedWorker} />
+                <INN worker={worker} selectedWorker={selectedWorker} />
 
-                    {worker.genTaxPayerIdNum !== selectedWorker.genTaxPayerIdNum && (
-                        <>
-                            <span className="col-span-1 text-base text-yellow-300">&rarr;</span>
-                            <span className="col-span-3 text-right italic text-yellow-300">
-                                {selectedWorker.OfficialName}
-                            </span>
-                        </>
-                    )}
-                </div>
-                <div className="grid grid-cols-7 items-center justify-center text-sm">
-                    <span className="col-span-3">ИНН: {worker.genTaxPayerIdNum}</span>
-
-                    {worker.genTaxPayerIdNum !== selectedWorker.genTaxPayerIdNum && (
-                        <>
-                            <span className="col-span-1 text-base text-yellow-300">&rarr;</span>
-
-                            <span className="col-span-3 text-right italic text-yellow-300">
-                                {selectedWorker.genTaxPayerIdNum}
-                            </span>
-                        </>
-                    )}
-                </div>
                 <div className="grow"></div>
                 <Select items={employeesArray} onChange={handleSelectWorker} current={selectedWorker} />
             </div>
 
-            {worker.genTaxPayerIdNum !== selectedWorker.genTaxPayerIdNum && (
-                <Button type="submit" className="bg-white text-sky-900" pending={pending}>
-                    Изменить
-                </Button>
-            )}
+            {worker.genTaxPayerIdNum !== selectedWorker.genTaxPayerIdNum && <SubmitCashier pending={pending} />}
         </form>
     )
 })
 
 Cashier.displayName = "Cashier"
+
+interface INNProps {
+    worker: IWorker
+    selectedWorker: IWorker
+}
+const INN = memo(({ worker, selectedWorker }: INNProps) => {
+    return (
+        <div className="grid grid-cols-7 items-center justify-center text-sm">
+            <span className="col-span-3">ИНН: {worker.genTaxPayerIdNum}</span>
+
+            {worker.genTaxPayerIdNum !== selectedWorker.genTaxPayerIdNum && (
+                <>
+                    <span className="col-span-1 text-base text-yellow-300">&rarr;</span>
+
+                    <span className="col-span-3 text-right italic text-yellow-300">
+                        {selectedWorker.genTaxPayerIdNum}
+                    </span>
+                </>
+            )}
+        </div>
+    )
+})
+INN.displayName = "INN"
+
+interface FIOProps extends INNProps {}
+const FIO = memo(({ selectedWorker, worker }: FIOProps) => {
+    return (
+        <div className="grid grid-cols-7 items-center justify-center text-sm">
+            <span className="col-span-3">ФИО: {worker.OfficialName}</span>
+
+            {worker.genTaxPayerIdNum !== selectedWorker.genTaxPayerIdNum && (
+                <>
+                    <span className="col-span-1 text-base text-yellow-300">&rarr;</span>
+                    <span className="col-span-3 text-right italic text-yellow-300">{selectedWorker.OfficialName}</span>
+                </>
+            )}
+        </div>
+    )
+})
+FIO.displayName = "FIO"
