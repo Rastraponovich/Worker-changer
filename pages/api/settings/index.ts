@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next"
-import { prisma } from "lib/prisma"
-import { TSettings } from "@/interfaces/settings"
+import type { NextApiRequest, NextApiResponse } from "next"
+import { prisma } from "src/shared/lib/prisma"
+import type { TSettings } from "src/shared/lib/models"
 import NextCors from "nextjs-cors"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

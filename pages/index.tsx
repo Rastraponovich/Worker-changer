@@ -1,18 +1,16 @@
-import Layout from "@/components/Layout/Layout"
-
-import { allSettled, fork, serialize } from "effector"
-import { useStore } from "effector-react"
-import { useEvent } from "effector-react/scope"
-import { $initalState, getStatus, startApp } from "features/initialApp"
-import { $errorGetWorker, $getWorkersStatus, $workers, getWorkers } from "features/workers"
-import { GetServerSideProps, GetStaticProps, NextPage } from "next"
-import { useRouter } from "next/router"
-import React, { memo, FC } from "react"
 import { useEffect } from "react"
+import { useRouter } from "next/router"
+import { useEvent, useStore } from "effector-react"
+import { fork, allSettled, serialize } from "effector"
 
-interface MainPageProps {}
+import type { GetStaticProps } from "next"
 
-const MainPage: NextPage<MainPageProps> = () => {
+import { $initalState, startApp } from "features/initialApp"
+import { $errorGetWorker, $getWorkersStatus, $workers, getWorkers } from "features/workers"
+
+import { Layout } from "src/widgets/layout"
+
+const MainPage = () => {
     const getWorkersEvent = useEvent(getWorkers)
 
     useEffect(() => {

@@ -1,16 +1,15 @@
-import { GetServerSideProps, GetStaticProps, NextPage } from "next"
-import { useStore } from "effector-react/scope"
-import { allSettled, fork, serialize } from "effector"
+import { useStore } from "effector-react"
+import { GetServerSideProps } from "next"
+import { fork, allSettled, serialize } from "effector"
 
 import { $errorGetWorker, $loadingWorkers, getWorkers } from "features/workers"
 
-import Layout from "@/components/Layout/Layout"
-import InfoBlock from "@/components/InfoBlock/InfoBlock"
-import CashierList from "@/components/CashierList/CashierList"
+import { CashierList } from "@/components/index"
 
-interface WorkersPageProps {}
+import { Layout } from "src/widgets/layout"
+import { InfoBlock } from "src/widgets/info-block"
 
-const WorkersPage: NextPage<WorkersPageProps> = () => {
+const WorkersPage = () => {
     const loading = useStore($loadingWorkers)
 
     const error = useStore($errorGetWorker)

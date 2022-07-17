@@ -1,7 +1,7 @@
-import { TSettings } from "@/interfaces/settings"
-import { AxiosResponse } from "axios"
 import { createEffect } from "effector"
 import { SettingsAPI } from "features/api"
+import type { AxiosResponse } from "axios"
+import type { TSettings } from "src/shared/lib/models"
 
 export const getSettingsFx = createEffect<null, AxiosResponse<TSettings[]>, Error>(SettingsAPI.GetSettingsAPI)
 export const createNewSettingsFx = createEffect<TSettings, AxiosResponse<any>, Error>(SettingsAPI.CreateNewSettingsAPI)

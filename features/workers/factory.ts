@@ -1,20 +1,9 @@
-import { IWorker, IWorkerChangeRespose } from "@/interfaces/types"
-import { AxiosResponse } from "axios"
-import {
-    attach,
-    createEffect,
-    createEvent,
-    createStore,
-    Effect,
-    Event,
-    forward,
-    restore,
-    sample,
-    Store,
-} from "effector"
+import type { AxiosResponse } from "axios"
+import { createEffect, createEvent, createStore, forward, sample } from "effector"
+
 import { API } from "features/api"
-import { ChangeEvent } from "react"
-import { FactoryProps, FactoryReturn } from "./types"
+import type { IWorker, IWorkerChangeRespose } from "src/shared/lib/models"
+import type { FactoryProps, FactoryReturn } from "./types"
 
 const defaultWoker: IWorker = {
     genTaxPayerIdNum: null,
@@ -33,7 +22,7 @@ const createWorkerFactory = (props: FactoryProps): FactoryReturn => {
     const { $employeesArray, name } = props
     const saveWorker = createEvent()
     const refreshWorker = createEvent()
-    const selectWorker = createEvent<ChangeEvent<HTMLSelectElement>>()
+    const selectWorker = createEvent<IWorker>()
 
     const $currentWorker = createStore<IWorker>(defaultWoker, { sid: name }).on(
         getWorkerFx.doneData,
@@ -47,7 +36,7 @@ const createWorkerFactory = (props: FactoryProps): FactoryReturn => {
     sample({
         clock: selectWorker,
         source: $employeesArray,
-        fn: (arr, e) => arr.find((worker) => worker.GUIDString === e.target.value),
+        fn: (employeesArray, selected) => employeesArray.find((worker) => worker.GUIDString === selected.GUIDString),
         target: $newWorker,
     })
 

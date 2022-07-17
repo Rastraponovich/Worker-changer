@@ -1,11 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next"
 
-import { useParser } from "@/hooks/usePareser"
-import { sendData } from "@/hooks/useGetData"
-import { getEmployees, getSystemInfo } from "@/schemas/schema"
-import { IEmployeesData, IWorker } from "interfaces/types"
-import { AxiosResponse } from "axios"
-import { ParsedGetWorkers } from "@/interfaces/parsedTypes"
+import { useParser } from "src/shared/hooks/usePareser"
+import { sendData } from "src/shared/hooks/useGetData"
+import { getEmployees } from "src/shared/schema"
+import { IWorker } from "src/shared/lib/models"
+import { ParsedGetWorkers } from "src/shared/lib/models/parsedTypes"
 import NextCors from "nextjs-cors"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

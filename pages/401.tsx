@@ -1,5 +1,4 @@
 import { NextPage } from "next"
-import React from "react"
 import Head from "next/head"
 import styles from "@/styles/401.module.css"
 

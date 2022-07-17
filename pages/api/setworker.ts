@@ -1,7 +1,7 @@
-import { NextApiRequest, NextApiResponse } from "next"
-import { IResponse } from "interfaces/types"
-import { sendData } from "@/hooks/useGetData"
-import { setWorker } from "schemas/schema"
+import type { NextApiRequest, NextApiResponse } from "next"
+import type { IResponse } from "src/shared/lib/models"
+import { sendData } from "src/shared/hooks/useGetData"
+import { setWorker } from "src/shared/schema"
 import NextCors from "nextjs-cors"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

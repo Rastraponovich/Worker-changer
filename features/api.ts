@@ -1,6 +1,5 @@
-import { TSettings } from "@/interfaces/settings"
-import { IWorker } from "@/interfaces/types"
-import { iternalAPI } from "lib/api"
+import { iternalAPI } from "src/shared/lib/api"
+import type { IWorker, TSettings } from "src/shared/lib/models"
 
 const GetSettingsAPI = async () => await iternalAPI.get("/settings")
 

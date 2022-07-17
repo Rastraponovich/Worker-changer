@@ -1,17 +1,11 @@
-import { memo } from "react"
 import { GetStaticProps, NextPage } from "next"
-import { useEvent, useList, useStore } from "effector-react"
-import { allSettled, fork, serialize } from "effector"
 
-import {
-    $getSettingsPending,
-    $settings,
-    createNewSettings,
-    getSettings,
-} from "features/settings"
+import { $getSettingsPending, $settings, createNewSettings, getSettings } from "features/settings"
 
 import Link from "next/link"
-import Layout from "@/components/Layout/Layout"
+import { Layout } from "src/widgets/layout"
+import { useEvent, useList, useStore } from "effector-react"
+import { allSettled, fork, serialize } from "effector"
 
 const SettingsPage: NextPage = () => {
     const handleGetData = useEvent(getSettings)
@@ -26,9 +20,9 @@ const SettingsPage: NextPage = () => {
             {useList($settings, {
                 keys: [pending, $settings],
                 fn: (item) => (
-                    <div className="grid grid-cols-1 w-full p-4">
+                    <div className="grid w-full grid-cols-1 p-4">
                         <Link href={`/settings/${item.id}`}>
-                            <a className="col-span-1 rounded p-4 flex flex-col bg-sky-900">
+                            <a className="col-span-1 flex flex-col rounded bg-sky-900 p-4">
                                 <span>Наименование : {item.name}</span>
                             </a>
                         </Link>
@@ -39,7 +33,7 @@ const SettingsPage: NextPage = () => {
     )
 }
 
-export default memo(SettingsPage)
+export default SettingsPage
 
 export const getStaticProps: GetStaticProps = async () => {
     const scope = fork()

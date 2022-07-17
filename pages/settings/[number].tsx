@@ -1,7 +1,4 @@
-import { ChangeEvent, FC, HTMLAttributes, memo } from "react"
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
-import { useEvent, useList, useStore } from "effector-react"
-import { allSettled, Event, fork, serialize } from "effector"
 
 import {
     $selectedSetting,
@@ -16,9 +13,12 @@ import {
     $deleteSettingsPending,
 } from "features/settings"
 
-import Layout from "@/components/Layout/Layout"
+import { Layout } from "src/widgets/layout"
 import { useRouter } from "next/router"
 import CustomInput from "@/components/CustomComponents/CustomInput"
+import { fork, allSettled, serialize, Event } from "effector"
+import { useEvent, useStore } from "effector-react"
+import { ChangeEvent, FC, memo } from "react"
 
 interface CustomCheckBoxProps {
     name?: string
@@ -44,13 +44,7 @@ const CustomCheckBox: FC<CustomCheckBoxProps> = ({
     return (
         <label className={labelClassName}>
             <span className={titleClassName}>{title}</span>
-            <input
-                type="checkbox"
-                name={name}
-                checked={checked}
-                onChange={handleChange}
-                className={className}
-            />
+            <input type="checkbox" name={name} checked={checked} onChange={handleChange} className={className} />
         </label>
     )
 }
@@ -69,22 +63,20 @@ const SettingsPage: NextPage = () => {
     const handleDelete = useEvent(deleteSettings)
     return (
         <Layout title="Настройки">
-            <button onClick={() => handleGetData(query.number.toString())}>
-                getSettings
-            </button>
+            <button onClick={() => handleGetData(query.number.toString())}>getSettings</button>
 
-            <h2 className="w-full mb-4">
+            <h2 className="mb-4 w-full">
                 link:
                 {`https://${currentSettings.ref}:${currentSettings.port}/rk7api/v0/xmlinterface.xml`}
             </h2>
-            <div className="w-full flex flex-col space-y-4 p-4 bg-sky-900 rounded shadow-lg">
+            <div className="flex w-full flex-col space-y-4 rounded bg-sky-900 p-4 shadow-lg">
                 <CustomInput
                     value={currentSettings.name}
                     name="name"
                     title="название"
                     labelClassName="grid grid-cols-5 "
                     titleClassName="first-letter:uppercase col-span-2 "
-                    className="text-white  col-span-3 px-2 py-1 rounded bg-transparent border-gray-300 border-2 focus-visible:outline-white"
+                    className="col-span-3  rounded border-2 border-gray-300 bg-transparent px-2 py-1 text-white focus-visible:outline-white"
                     onChange={changeSelectedSetting}
                 />
 
@@ -94,7 +86,7 @@ const SettingsPage: NextPage = () => {
                     title="логин"
                     labelClassName="grid grid-cols-5 "
                     titleClassName="first-letter:uppercase col-span-2 "
-                    className="text-white  col-span-3 px-2 py-1 rounded bg-transparent border-gray-300 border-2 focus-visible:outline-white"
+                    className="col-span-3  rounded border-2 border-gray-300 bg-transparent px-2 py-1 text-white focus-visible:outline-white"
                     onChange={changeSelectedSetting}
                 />
 
@@ -104,7 +96,7 @@ const SettingsPage: NextPage = () => {
                     title="пароль"
                     labelClassName="grid grid-cols-5 "
                     titleClassName="first-letter:uppercase col-span-2 "
-                    className="text-white  col-span-3 px-2 py-1 rounded bg-transparent border-gray-300 border-2 focus-visible:outline-white"
+                    className="col-span-3  rounded border-2 border-gray-300 bg-transparent px-2 py-1 text-white focus-visible:outline-white"
                     onChange={changeSelectedSetting}
                 />
 
@@ -114,7 +106,7 @@ const SettingsPage: NextPage = () => {
                     title="порт"
                     labelClassName="grid grid-cols-5 "
                     titleClassName="first-letter:uppercase col-span-2 "
-                    className="text-white  col-span-3 px-2 py-1 rounded bg-transparent border-gray-300 border-2 focus-visible:outline-white"
+                    className="col-span-3  rounded border-2 border-gray-300 bg-transparent px-2 py-1 text-white focus-visible:outline-white"
                     onChange={changeSelectedSetting}
                 />
 
@@ -124,7 +116,7 @@ const SettingsPage: NextPage = () => {
                     title="ардес ref сервера"
                     labelClassName="grid grid-cols-5 "
                     titleClassName="first-letter:uppercase col-span-2 "
-                    className="text-white  col-span-3 px-2 py-1 rounded bg-transparent border-gray-300 border-2 focus-visible:outline-white"
+                    className="col-span-3  rounded border-2 border-gray-300 bg-transparent px-2 py-1 text-white focus-visible:outline-white"
                     onChange={changeSelectedSetting}
                 />
                 <CustomInput
@@ -133,7 +125,7 @@ const SettingsPage: NextPage = () => {
                     title="mainParentIdent"
                     labelClassName="grid grid-cols-5 "
                     titleClassName="first-letter:uppercase col-span-2 "
-                    className="text-white  col-span-3 px-2 py-1 rounded bg-transparent border-gray-300 border-2 focus-visible:outline-white"
+                    className="col-span-3  rounded border-2 border-gray-300 bg-transparent px-2 py-1 text-white focus-visible:outline-white"
                     onChange={changeSelectedSetting}
                 />
                 <CustomCheckBox
@@ -143,7 +135,7 @@ const SettingsPage: NextPage = () => {
                     onChange={changeSelectedCheckBoxSetting}
                     labelClassName="grid grid-cols-5 "
                     titleClassName="first-letter:uppercase col-span-1 "
-                    className="text-sky-900  col-span-1 justify-self-start self-center"
+                    className="col-span-1  self-center justify-self-start text-sky-900"
                 />
 
                 <CustomCheckBox
@@ -153,26 +145,26 @@ const SettingsPage: NextPage = () => {
                     onChange={changeSelectedCheckBoxSetting}
                     labelClassName="grid grid-cols-5"
                     titleClassName="first-letter:uppercase col-span-1 "
-                    className="text-sky-900  col-span-1 justify-self-start self-center"
+                    className="col-span-1  self-center justify-self-start text-sky-900"
                 />
             </div>
-            <div className="flex justify-between w-full px-8 mt-4">
+            <div className="mt-4 flex w-full justify-between px-8">
                 <button
                     onClick={back}
-                    className="capitalize px-10 py-2 rounded bg-red-900 text-white shadow-lg hover:bg-red-700 active:opacity-70 transition-all duration-100"
+                    className="rounded bg-red-900 px-10 py-2 capitalize text-white shadow-lg transition-all duration-100 hover:bg-red-700 active:opacity-70"
                 >
                     назад
                 </button>
                 <button
                     onClick={handleDelete}
-                    className="capitalize px-10 py-2 rounded bg-red-900 text-white shadow-lg hover:bg-red-700 active:opacity-70 transition-all duration-100"
+                    className="rounded bg-red-900 px-10 py-2 capitalize text-white shadow-lg transition-all duration-100 hover:bg-red-700 active:opacity-70"
                 >
                     {deleteSettingsPending ? "удаление" : "удалить"}
                 </button>
 
                 <button
                     onClick={handleSaveSettings}
-                    className="capitalize px-10 py-2 rounded bg-sky-900 text-white shadow-lg hover:bg-sky-700 active:opacity-70 transition-all duration-100"
+                    className="rounded bg-sky-900 px-10 py-2 capitalize text-white shadow-lg transition-all duration-100 hover:bg-sky-700 active:opacity-70"
                 >
                     {updateSettingsPending ? "сохраненяется" : "сохранить"}
                 </button>

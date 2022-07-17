@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { sendData } from "@/hooks/useGetData"
-import { useParser } from "@/hooks/usePareser"
-import { getEmployeesByGuid } from "@/schemas/schema"
+import { sendData } from "src/shared/hooks/useGetData"
+import { useParser } from "src/shared/hooks/usePareser"
+import { getEmployeesByGuid } from "src/shared/schema"
 import NextCors from "nextjs-cors"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

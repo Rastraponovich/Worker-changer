@@ -1,7 +1,7 @@
-import { TSettings } from "@/interfaces/settings"
-import { createEvent, createStore, forward, sample } from "effector"
+import { createEvent, createStore, sample, forward } from "effector"
 import { ChangeEvent } from "react"
 import { createNewSettingsFx, deleteSettingsFx, getSettingsFx, updateSettingsFx, getOneSettingsFx } from "./api"
+import type { TSettings } from "src/shared/lib/models"
 
 const bulkSettings: TSettings = {
     name: "",

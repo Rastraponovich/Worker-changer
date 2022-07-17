@@ -1,10 +1,8 @@
-import { AxiosResponse } from "axios"
-import { createEffect, createEvent, createStore, forward, sample, scopeBind } from "effector"
-
+import type { AxiosResponse } from "axios"
+import { createEvent, createEffect, createStore, forward, sample, scopeBind } from "effector"
 import config from "package.json"
 
-import { RK7QueryResult } from "@/interfaces/rk7Api"
-import { getWorkers } from "features/workers"
+import type { RK7QueryResult } from "src/shared/lib/models"
 import { API } from "features/api"
 
 const startApp = createEvent()

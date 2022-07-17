@@ -1,7 +1,7 @@
-import { CommandResult } from "@/interfaces/rk7Api"
-import { IWorker, IWorkerChangeRespose } from "@/interfaces/types"
+import type { CommandResult, IWorker, IWorkerChangeRespose } from "src/shared/lib/models"
 import { AxiosResponse } from "axios"
 import { createEffect } from "effector"
+
 import { API } from "features/api"
 
 type APIResponse = {

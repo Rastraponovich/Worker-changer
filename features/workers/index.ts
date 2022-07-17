@@ -1,11 +1,8 @@
-import { IWorker } from "@/interfaces/types"
-import { createEvent, createStore, forward, sample, scopeBind } from "effector"
-import { debug } from "patronum"
-import { getWorkersFx, saveWorkerFx } from "./api"
+import { createStore, createEvent, sample, forward } from "effector"
+import { getWorkersFx } from "./api"
 import { createWorkerFactory } from "./factory"
-import { WorkerProps } from "./types"
-
-//--------------------------//
+import type { WorkerProps } from "./types"
+import type { IWorker } from "src/shared/lib/models"
 
 const $loadingWorkers = createStore<boolean>(false).on(getWorkersFx.pending, (_, payload) => payload)
 
